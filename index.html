@@ -12,7 +12,6 @@
     --line:#E4DFD3;
     --accent:#9E5A33;
     --accent-bg:#F5E6D8;
-    --tag-bg:#EFEAE0;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -30,18 +29,11 @@
     border-bottom: 1px solid var(--line);
     margin-bottom: 8px;
   }
-  header .eyebrow{
-    font-family: -apple-system, sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
   header h1{
     font-size: 32px;
     font-weight: 400;
     letter-spacing: 0.02em;
+    color: var(--accent);
   }
   header .date{
     font-family: -apple-system, sans-serif;
@@ -49,6 +41,57 @@
     color: var(--muted);
     margin-top: 6px;
   }
+
+  .nav-actions{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+    align-items: stretch;
+  }
+  .nav-btn{
+    flex:1;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    padding: 11px 12px;
+    border-radius: 8px;
+    cursor:pointer;
+    transition: 0.15s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.2;
+  }
+  .nav-btn.active{
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .admin-btn{
+    flex: 0 0 auto;
+    width: 44px;
+    padding: 11px 0;
+    font-size: 18px;
+    line-height:1;
+  }
+
+  .search-box{
+    width:100%;
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 14px;
+    margin:18px 0 10px;
+    outline:none;
+  }
+  .search-box:focus{ border-color:var(--accent); }
 
   nav{
     display:flex;
@@ -74,15 +117,6 @@
     background: var(--ink);
     border-color: var(--ink);
     color: var(--paper);
-  }
-
-  .section-title{
-    font-family: -apple-system, sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin: 22px 0 10px 2px;
   }
 
   .dish{
@@ -149,23 +183,203 @@
     line-height: 1.6;
     color: var(--ink);
   }
-  .tags{
-    display:flex; flex-wrap:wrap; gap:6px; margin-top: 10px;
-  }
-  .tag{
-    font-size: 11px;
-    background: var(--tag-bg);
-    color: var(--muted);
-    padding: 3px 9px;
-    border-radius: 999px;
-  }
-
-  .empty{
+  .empty, .error-msg{
     font-family: -apple-system, sans-serif;
     font-size: 13px;
     color: var(--muted);
     text-align:center;
     padding: 30px 0;
+  }
+  .error-msg button{
+    display:inline-block;
+    margin-top:12px;
+    font-family: -apple-system, sans-serif;
+    font-size:13px;
+    background:var(--accent-bg);
+    color:var(--accent);
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+  }
+
+  .fav-btn, .edit-btn{
+    width: 100%;
+    margin-top: 14px;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    color: var(--accent);
+    background: var(--accent-bg);
+    padding: 11px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .fav-btn:active, .edit-btn:active{
+    color: var(--paper);
+    background: var(--accent);
+  }
+
+  .back-btn{
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 16px;
+    cursor:pointer;
+  }
+
+  .view-title{
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .view-subtitle{
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .plan-row{
+    margin-bottom: 16px;
+  }
+  .plan-row label{
+    display:block;
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .plan-row select{
+    width: 100%;
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 11px 12px;
+    appearance: none;
+  }
+
+  .save-btn{
+    width: 100%;
+    margin-top: 8px;
+    font-family: -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 13px;
+    border-radius: 8px;
+    text-align: center;
+    cursor:pointer;
+  }
+  .save-btn:active{ opacity: 0.7; }
+
+  .sync-status{
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 12px;
+    min-height: 16px;
+  }
+
+  .today-card{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 2px;
+  }
+  .today-card:last-child{ border-bottom: none; }
+  .today-card .cat-label{
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .today-card .dish-name{
+    font-size: 18px;
+  }
+  .today-card .dish-meta{
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .today-stats{
+    margin-top: 24px;
+    padding: 14px 2px;
+  }
+  .today-stats .stats-title{
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* админка */
+  .admin-dish-item{
+    border-bottom:1px solid var(--line);
+    padding:14px 2px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .admin-dish-item .info{
+    font-size:15px;
+  }
+  .admin-dish-item .meta{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:2px;
+  }
+  .admin-dish-item button{
+    background: none;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .admin-dish-item button:hover{ background:var(--accent-bg); }
+  .add-dish-form{
+    margin-top:20px;
+    padding:20px 2px;
+    border-top:1px solid var(--line);
+  }
+  .add-dish-form input, .add-dish-form textarea, .add-dish-form select{
+    width:100%;
+    font-family: -apple-system, sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:10px;
+    display:block;
+  }
+  .add-dish-form textarea{ resize:vertical; min-height:70px; }
+  .add-dish-form label{
+    font-family: -apple-system, sans-serif;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--accent);
+    margin-bottom:4px;
+    display:block;
   }
 </style>
 </head>
@@ -173,62 +387,113 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Домашнее меню</div>
-    <h1>Что у нас на сегодня</h1>
+    <h1>Домашнее меню</h1>
     <div class="date" id="today"></div>
+    <div class="nav-actions">
+      <button class="nav-btn active" data-view="main">Меню</button>
+      <button class="nav-btn" data-view="today">Сегодня</button>
+      <button class="nav-btn" data-view="tomorrow">Завтра</button>
+      <button class="nav-btn admin-btn" data-view="admin" title="Управление блюдами">⚙</button>
+    </div>
   </header>
 
-  <nav id="tabs"></nav>
+  <!-- ГЛАВНЫЙ ЭКРАН -->
+  <div id="mainView">
+    <nav id="tabs"></nav>
+    <input type="text" class="search-box" id="searchInput" placeholder="Поиск блюда...">
+    <div id="content"></div>
+    <div id="cloudError" style="display:none;"></div>
+  </div>
 
-  <div id="content"></div>
+  <!-- ЭКРАН "СЕГОДНЯ" -->
+  <div id="todayView" style="display:none;">
+    <button class="back-btn" data-back="todayView">← Назад в меню</button>
+    <div class="view-title" id="todayTitle">Сегодня</div>
+    <div class="view-subtitle" id="todaySubtitle"></div>
+    <div id="todayContent"></div>
+    <div id="todayEditForm" style="display:none;"></div>
+    <button class="save-btn" id="todaySaveBtn" style="display:none;">Сохранить</button>
+    <div class="sync-status" id="todayStatus"></div>
+  </div>
+
+  <!-- ЭКРАН "ЗАВТРА" -->
+  <div id="tomorrowView" style="display:none;">
+    <button class="back-btn" data-back="tomorrowView">← Назад в меню</button>
+    <div class="view-title" id="tomorrowTitle">План на завтра</div>
+    <div class="view-subtitle" id="tomorrowSubtitle"></div>
+    <div id="tomorrowContent"></div>
+    <div id="tomorrowEditForm" style="display:none;"></div>
+    <button class="save-btn" id="tomorrowSaveBtn" style="display:none;">Сохранить</button>
+    <div class="sync-status" id="tomorrowStatus"></div>
+  </div>
+
+  <!-- ЭКРАН АДМИНИСТРИРОВАНИЯ -->
+  <div id="adminView" style="display:none;">
+    <button class="back-btn" data-back="adminView">← Назад в меню</button>
+    <div class="view-title">Управление блюдами</div>
+    <div class="view-subtitle">Добавление и удаление своих блюд</div>
+    <div id="adminDishList"></div>
+    <button class="fav-btn" id="showAddFormBtn" style="margin-top:16px;">+ Добавить блюдо</button>
+    <div id="addDishForm" class="add-dish-form" style="display:none;"></div>
+  </div>
 
 </div>
 
 <script>
 /* =========================================================
    БАЗА БЛЮД
-   Чтобы добавить блюдо — скопируйте один объект {...} внутри
-   нужной категории (breakfast / lunch / dinner / snack)
-   и поменяйте значения. id должен быть уникальным.
    ========================================================= */
-
 const MENU = {
   breakfast: [
     {
       id: "oatmeal",
-      name: "Овсянка с ягодами, орехами и топпингом",
+      name: "Овсянка с ягодами и орехами",
       kcal: 320,
       portion: "300 г",
       time: "10 мин",
       ingredients: "Овсяные хлопья (50 г), молоко (200 мл), черника (50 г), грецкий орех (15 г), мёд (1 ч.л.)",
       protein: 12, fat: 9, carbs: 45,
       recipe: "Залить хлопья молоком, варить на среднем огне 5 минут, помешивая. Снять с огня, добавить ягоды, орехи и мёд.",
-      tags: ["вегетарианское", "быстро"]
+      tags: ["вегетарианское", "быстро"],
+      favorite: true
     },
     {
       id: "syrniki",
-      name: "Творожные оладьи с вареньем",
+      name: "Творожные оладьи",
       kcal: 280,
       portion: "250 г (4 шт)",
       time: "20 мин",
       ingredients: "Творог (200 г), яйцо (1 шт), мука (3 ст.л.), сахар (1 ст.л.), сметана для подачи",
       protein: 22, fat: 11, carbs: 24,
       recipe: "Смешать творог, яйцо, сахар и муку до однородности. Сформировать оладьи, обжарить на среднем огне по 3 минуты с каждой стороны.",
-      tags: ["высокий белок"]
+      tags: ["высокий белок"],
+      favorite: true
     },
     {
-      id: "syrniki",
-      name: "Тут должно быть новое блюдо",
-      kcal: 320,
-      portion: "250 г (4 шт)",
-      time: "20 мин",
-      ingredients: "Творог (200 г), яйцо (1 шт), мука (3 ст.л.), сахар (1 ст.л.), сметана для подачи",
-      protein: 22, fat: 11, carbs: 24,
-      recipe: "",
-      tags: ["высокий белок"]
+      id: "scrambled-eggs",
+      name: "Яичница с тостом и авокадо",
+      kcal: 350,
+      portion: "250 г",
+      time: "10 мин",
+      ingredients: "Яйца (2 шт), хлеб (1 кусок), авокадо (1/2 шт), соль, перец",
+      protein: 16, fat: 22, carbs: 20,
+      recipe: "Обжарить яйца на сковороде до желаемой готовности. Тост подсушить, выложить размятый авокадо, подавать с яичницей.",
+      tags: ["быстро", "вегетарианское"],
+      favorite: false
+    },
+    {
+      id: "smoothie-bowl",
+      name: "Смузи-боул с бананом и гранолой",
+      kcal: 310,
+      portion: "350 г",
+      time: "8 мин",
+      ingredients: "Банан (1 шт), греческий йогурт (150 г), гранола (30 г), ягоды (40 г)",
+      protein: 11, fat: 6, carbs: 52,
+      recipe: "Взбить банан с йогуртом в блендере до однородности, перелить в миску, посыпать гранолой и ягодами.",
+      tags: ["вегетарианское", "быстро"],
+      favorite: false
     }
   ],
-
   lunch: [
     {
       id: "soup-chicken",
@@ -239,7 +504,8 @@ const MENU = {
       ingredients: "Куриное филе (150 г), картофель (100 г), морковь (50 г), лук (30 г), бульон (350 мл)",
       protein: 28, fat: 8, carbs: 22,
       recipe: "Куриное филе отварить в бульоне 20 минут. Добавить нарезанные овощи, варить ещё 15 минут до готовности.",
-      tags: ["сытно", "на обед"]
+      tags: ["сытно", "на обед"],
+      favorite: true
     },
     {
       id: "buckwheat-beef",
@@ -250,10 +516,10 @@ const MENU = {
       ingredients: "Говядина (150 г), гречка (80 г сухой), болгарский перец (50 г), лук (30 г)",
       protein: 34, fat: 14, carbs: 48,
       recipe: "Говядину обжарить до румяной корочки, добавить лук и перец, тушить 15 минут. Гречку отварить отдельно, подавать вместе.",
-      tags: ["высокий белок", "сытно"]
+      tags: ["высокий белок", "сытно"],
+      favorite: true
     }
   ],
-
   dinner: [
     {
       id: "salmon-veg",
@@ -264,7 +530,8 @@ const MENU = {
       ingredients: "Филе лосося (150 г), брокколи (100 г), цукини (80 г), лимон, оливковое масло",
       protein: 30, fat: 22, carbs: 8,
       recipe: "Лосось и нарезанные овощи готовить на пару 12-15 минут. Перед подачей сбрызнуть оливковым маслом и лимонным соком.",
-      tags: ["лёгкое", "на ужин"]
+      tags: ["лёгкое", "на ужин"],
+      favorite: true
     },
     {
       id: "chicken-rice",
@@ -275,10 +542,10 @@ const MENU = {
       ingredients: "Куриные бёдра (200 г), рис (70 г сухого), чеснок, паприка, соевый соус",
       protein: 32, fat: 16, carbs: 38,
       recipe: "Бёдра замариновать в соевом соусе с чесноком и паприкой на 15 минут, запекать при 200°C 30 минут. Рис отварить отдельно.",
-      tags: ["сытно"]
+      tags: ["сытно"],
+      favorite: true
     }
   ],
-
   snack: [
     {
       id: "yogurt-nuts",
@@ -289,7 +556,8 @@ const MENU = {
       ingredients: "Греческий йогурт (150 г), миндаль (10 г), мёд (1 ч.л.)",
       protein: 10, fat: 7, carbs: 18,
       recipe: "Выложить йогурт в миску, посыпать орехами и полить мёдом.",
-      tags: ["быстро", "вегетарианское"]
+      tags: ["быстро", "вегетарианское"],
+      favorite: true
     },
     {
       id: "apple-peanut",
@@ -300,7 +568,8 @@ const MENU = {
       ingredients: "Яблоко (1 шт), арахисовая паста (20 г)",
       protein: 6, fat: 10, carbs: 24,
       recipe: "Нарезать яблоко дольками, подавать с арахисовой пастой для дип-соуса.",
-      tags: ["быстро", "вегетарианское"]
+      tags: ["быстро", "вегетарианское"],
+      favorite: true
     }
   ]
 };
@@ -312,15 +581,601 @@ const CATEGORIES = [
   { key: "snack", label: "Перекус" }
 ];
 
-/* ========================================================= */
+/* =========================================================
+   JSONBIN
+   ========================================================= */
+const JSONBIN_ID = "6a2da444da38895dfebb3efa";
+const JSONBIN_KEY = "$2a$10$4wA7T6em0ATgsI36drn8Ie4xNUEB77cklSxKuv7LOXVJbQAhds2Xe";
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
+let cloudData = { favorites: {}, plan: {}, customDishes: [] };
+let allDishes = [];
+
+async function loadCloud(){
+  const res = await fetch(JSONBIN_URL + "/latest", {
+    headers: { "X-Master-Key": JSONBIN_KEY }
+  });
+  if (!res.ok) throw new Error("HTTP error " + res.status);
+  const data = await res.json();
+  cloudData = data.record || { favorites: {}, plan: {}, customDishes: [] };
+  if(!cloudData.favorites) cloudData.favorites = {};
+  if(!cloudData.plan) cloudData.plan = {};
+  if(!cloudData.customDishes) cloudData.customDishes = [];
+  window._cloudLoadError = false;
+}
+
+async function saveCloud(){
+  const res = await fetch(JSONBIN_URL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": JSONBIN_KEY
+    },
+    body: JSON.stringify(cloudData)
+  });
+  if (!res.ok) throw new Error("HTTP error " + res.status);
+  return true;
+}
+
+/* =========================================================
+   Управление блюдами
+   ========================================================= */
+function prepareAllDishes(){
+  const dishes = [];
+  for (const cat of CATEGORIES) {
+    const list = MENU[cat.key] || [];
+    list.forEach(d => {
+      dishes.push({ ...d, category: cat.key, isCustom: false });
+    });
+  }
+  (cloudData.customDishes || []).forEach(d => {
+    dishes.push({ ...d, isCustom: true });
+  });
+  allDishes = dishes;
+}
+
+function getDishById(id){
+  return allDishes.find(d => d.id === id);
+}
+
+function isFavorite(dish){
+  if(cloudData.favorites.hasOwnProperty(dish.id)) return cloudData.favorites[dish.id];
+  return !!dish.favorite;
+}
+
+async function toggleFavorite(dish){
+  const newVal = !isFavorite(dish);
+  cloudData.favorites[dish.id] = newVal;
+  try {
+    await saveCloud();
+    render();
+  } catch(e) {
+    cloudData.favorites[dish.id] = !newVal;
+    alert("Не удалось сохранить избранное. Проверьте соединение.");
+  }
+}
+
+/* =========================================================
+   Утилиты дат
+   ========================================================= */
+function formatDateLabel(dateStr){
+  const [y,m,dd] = dateStr.split("-").map(Number);
+  const d = new Date(y, m-1, dd);
+  return d.toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long" });
+}
+
+function todayDateStr(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${dd}`;
+}
+
+function tomorrowDateStr(){
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${dd}`;
+}
+
+/* =========================================================
+   Переключение экранов
+   ========================================================= */
+function setView(viewId){
+  ['mainView','todayView','tomorrowView','adminView'].forEach(id => {
+    document.getElementById(id).style.display = (id === viewId+'View' || (viewId==='main' && id==='mainView')) ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === viewId);
+  });
+
+  if (viewId === 'today') renderTodayView();
+  if (viewId === 'tomorrow') renderTomorrowView();
+  if (viewId === 'admin') renderAdmin();
+  if (viewId === 'main') render();
+}
+
+/* =========================================================
+   Функция отображения плана (сводка)
+   ========================================================= */
+function renderPlanSummary(dateStr, contentEl, editFormEl, saveBtnEl, statusEl, emptyMessage, addButtonLabel, saveCallback){
+  const dayPlan = cloudData.plan[dateStr] || {};
+  contentEl.innerHTML = "";
+  editFormEl.style.display = "none";
+  saveBtnEl.style.display = "none";
+
+  const activeEntries = Object.entries(dayPlan).filter(([cat, dishId]) => dishId && dishId !== "skip");
+  if(activeEntries.length === 0){
+    contentEl.innerHTML = `
+      <div class="empty">
+        ${emptyMessage}<br><br>
+        <button class="fav-btn" id="showPlanEditBtn">${addButtonLabel}</button>
+      </div>
+    `;
+    document.getElementById("showPlanEditBtn").addEventListener("click", () => showEditForm(dateStr, editFormEl, saveBtnEl, contentEl, saveCallback));
+    return;
+  }
+
+  let totalKcal = 0, totalProtein = 0, totalFat = 0, totalCarbs = 0;
+
+  CATEGORIES.forEach(cat => {
+    const dishId = dayPlan[cat.key];
+    if(!dishId || dishId === "skip") return;
+    const dish = getDishById(dishId);
+    if(!dish) return;
+
+    const card = document.createElement("div");
+    card.className = "today-card";
+    card.innerHTML = `
+      <div class="cat-label">${cat.label}</div>
+      <div class="dish-name">${dish.name}</div>
+      <div class="dish-meta">${dish.kcal} ккал · ${dish.portion}</div>
+    `;
+    contentEl.appendChild(card);
+
+    totalKcal += dish.kcal;
+    totalProtein += dish.protein;
+    totalFat += dish.fat;
+    totalCarbs += dish.carbs;
+  });
+
+  if (totalKcal > 0) {
+    const statsBlock = document.createElement("div");
+    statsBlock.className = "today-stats";
+    statsBlock.innerHTML = `
+      <div class="stats-title">Итого за день</div>
+      <div class="stats">
+        <div class="stat"><div class="num">${totalKcal}</div><div class="lbl">ккал</div></div>
+        <div class="stat"><div class="num">${totalProtein}г</div><div class="lbl">белки</div></div>
+        <div class="stat"><div class="num">${totalFat}г</div><div class="lbl">жиры</div></div>
+        <div class="stat"><div class="num">${totalCarbs}г</div><div class="lbl">углеводы</div></div>
+      </div>
+    `;
+    contentEl.appendChild(statsBlock);
+  }
+
+  const editBtn = document.createElement("button");
+  editBtn.className = "edit-btn";
+  editBtn.textContent = "✎ Изменить";
+  editBtn.addEventListener("click", () => showEditForm(dateStr, editFormEl, saveBtnEl, contentEl, saveCallback));
+  contentEl.appendChild(editBtn);
+}
+
+function showEditForm(dateStr, editFormEl, saveBtnEl, contentEl, saveCallback){
+  contentEl.innerHTML = "";
+  editFormEl.style.display = "block";
+  saveBtnEl.style.display = "block";
+
+  const dayPlan = cloudData.plan[dateStr] || {};
+  editFormEl.innerHTML = "";
+
+  CATEGORIES.forEach(cat => {
+    const row = document.createElement("div");
+    row.className = "plan-row";
+
+    const label = document.createElement("label");
+    label.textContent = cat.label;
+    row.appendChild(label);
+
+    const select = document.createElement("select");
+    select.dataset.cat = cat.key;
+
+    const emptyOpt = document.createElement("option");
+    emptyOpt.value = "";
+    emptyOpt.textContent = "— не выбрано —";
+    select.appendChild(emptyOpt);
+
+    const skipOpt = document.createElement("option");
+    skipOpt.value = "skip";
+    skipOpt.textContent = "— пропустить —";
+    select.appendChild(skipOpt);
+
+    const dishesForCat = allDishes.filter(d => d.category === cat.key).sort((a,b) => a.name.localeCompare(b.name, "ru"));
+    dishesForCat.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.textContent = d.name;
+      if(dayPlan[cat.key] === d.id) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    if(dayPlan[cat.key] === "skip") skipOpt.selected = true;
+
+    row.appendChild(select);
+    editFormEl.appendChild(row);
+  });
+
+  saveBtnEl.onclick = saveCallback;
+}
+
+/* =========================================================
+   Сегодня
+   ========================================================= */
+function renderTodayView(){
+  const dateStr = todayDateStr();
+  document.getElementById("todayTitle").textContent = "Сегодня";
+  document.getElementById("todaySubtitle").textContent = formatDateLabel(dateStr);
+
+  renderPlanSummary(
+    dateStr,
+    document.getElementById("todayContent"),
+    document.getElementById("todayEditForm"),
+    document.getElementById("todaySaveBtn"),
+    document.getElementById("todayStatus"),
+    "На сегодня ничего не запланировано.",
+    "Добавить план на сегодня",
+    saveTodayPlan
+  );
+}
+
+async function saveTodayPlan(){
+  const dateStr = todayDateStr();
+  const status = document.getElementById("todayStatus");
+  status.textContent = "Сохранение...";
+
+  const dayPlan = {};
+  document.querySelectorAll("#todayEditForm select").forEach(sel => {
+    const val = sel.value;
+    if(val === "skip") dayPlan[sel.dataset.cat] = "skip";
+    else if(val) dayPlan[sel.dataset.cat] = val;
+  });
+
+  if(Object.keys(dayPlan).length === 0){
+    delete cloudData.plan[dateStr];
+  }else{
+    cloudData.plan[dateStr] = dayPlan;
+  }
+
+  try {
+    await saveCloud();
+    status.textContent = "Сохранено ✓";
+    renderTodayView();
+  } catch(e) {
+    status.textContent = "Ошибка сохранения";
+  }
+  setTimeout(() => { status.textContent = ""; }, 2500);
+}
+
+/* =========================================================
+   Завтра
+   ========================================================= */
+function renderTomorrowView(){
+  const dateStr = tomorrowDateStr();
+  document.getElementById("tomorrowTitle").textContent = "План на завтра";
+  document.getElementById("tomorrowSubtitle").textContent = formatDateLabel(dateStr);
+
+  renderPlanSummary(
+    dateStr,
+    document.getElementById("tomorrowContent"),
+    document.getElementById("tomorrowEditForm"),
+    document.getElementById("tomorrowSaveBtn"),
+    document.getElementById("tomorrowStatus"),
+    "На завтра ничего не запланировано.",
+    "Добавить план на завтра",
+    saveTomorrowPlan
+  );
+}
+
+async function saveTomorrowPlan(){
+  const dateStr = tomorrowDateStr();
+  const status = document.getElementById("tomorrowStatus");
+  status.textContent = "Сохранение...";
+
+  const dayPlan = {};
+  document.querySelectorAll("#tomorrowEditForm select").forEach(sel => {
+    const val = sel.value;
+    if(val === "skip") dayPlan[sel.dataset.cat] = "skip";
+    else if(val) dayPlan[sel.dataset.cat] = val;
+  });
+
+  if(Object.keys(dayPlan).length === 0){
+    delete cloudData.plan[dateStr];
+  }else{
+    cloudData.plan[dateStr] = dayPlan;
+  }
+
+  try {
+    await saveCloud();
+    status.textContent = "Сохранено ✓";
+    renderTomorrowView();
+  } catch(e) {
+    status.textContent = "Ошибка сохранения";
+  }
+  setTimeout(() => { status.textContent = ""; }, 2500);
+}
+
+/* =========================================================
+   Админка
+   ========================================================= */
+function renderAdmin(){
+  const listEl = document.getElementById("adminDishList");
+  listEl.innerHTML = "";
+
+  const dishesByCat = {};
+  allDishes.forEach(d => {
+    const cat = d.category || "other";
+    if(!dishesByCat[cat]) dishesByCat[cat] = [];
+    dishesByCat[cat].push(d);
+  });
+
+  for(const cat of CATEGORIES){
+    const dishes = dishesByCat[cat.key] || [];
+    if(dishes.length === 0) continue;
+    const catHeader = document.createElement("div");
+    catHeader.className = "cat-label";
+    catHeader.textContent = cat.label;
+    catHeader.style.marginTop = "20px";
+    listEl.appendChild(catHeader);
+
+    dishes.forEach(d => {
+      const item = document.createElement("div");
+      item.className = "admin-dish-item";
+      item.innerHTML = `
+        <div>
+          <div class="info">${d.name} ${d.isCustom ? '(моё)' : '(встроенное)'}</div>
+          <div class="meta">${d.kcal} ккал · ${d.category}</div>
+        </div>
+        ${d.isCustom ? '<button class="delete-dish-btn">Удалить</button>' : ''}
+      `;
+      if(d.isCustom){
+        item.querySelector('.delete-dish-btn').addEventListener('click', () => deleteCustomDish(d.id));
+      }
+      listEl.appendChild(item);
+    });
+  }
+
+  if (allDishes.length === 0) {
+    listEl.innerHTML = '<div class="empty">Блюд пока нет</div>';
+  }
+
+  const formContainer = document.getElementById("addDishForm");
+  formContainer.style.display = 'none';
+  formContainer.innerHTML = `
+    <label>Название</label>
+    <input type="text" id="newDishName" placeholder="Название блюда">
+    <label>Категория</label>
+    <select id="newDishCategory">
+      ${CATEGORIES.map(c => `<option value="${c.key}">${c.label}</option>`).join('')}
+    </select>
+    <label>Ккал</label>
+    <input type="number" id="newDishKcal" placeholder="320">
+    <label>Белки (г)</label>
+    <input type="number" id="newDishProtein" placeholder="12">
+    <label>Жиры (г)</label>
+    <input type="number" id="newDishFat" placeholder="9">
+    <label>Углеводы (г)</label>
+    <input type="number" id="newDishCarbs" placeholder="45">
+    <label>Порция (пример: 300 г)</label>
+    <input type="text" id="newDishPortion" placeholder="300 г">
+    <label>Время приготовления</label>
+    <input type="text" id="newDishTime" placeholder="15 мин">
+    <label>Ингредиенты</label>
+    <textarea id="newDishIngredients" placeholder="Список ингредиентов"></textarea>
+    <label>Рецепт</label>
+    <textarea id="newDishRecipe" placeholder="Пошаговое приготовление"></textarea>
+    <label>Теги (через запятую)</label>
+    <input type="text" id="newDishTags" placeholder="быстро, вегетарианское">
+    <button class="save-btn" id="submitNewDishBtn">Добавить</button>
+  `;
+
+  document.getElementById("showAddFormBtn").onclick = () => {
+    formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+  };
+
+  document.getElementById("submitNewDishBtn").addEventListener('click', addCustomDish);
+}
+
+async function addCustomDish(){
+  const name = document.getElementById("newDishName").value.trim();
+  if(!name) return alert("Введите название");
+  const category = document.getElementById("newDishCategory").value;
+  const newDish = {
+    id: "custom_" + Date.now(),
+    name,
+    category,
+    kcal: Number(document.getElementById("newDishKcal").value) || 0,
+    protein: Number(document.getElementById("newDishProtein").value) || 0,
+    fat: Number(document.getElementById("newDishFat").value) || 0,
+    carbs: Number(document.getElementById("newDishCarbs").value) || 0,
+    portion: document.getElementById("newDishPortion").value || "—",
+    time: document.getElementById("newDishTime").value || "—",
+    ingredients: document.getElementById("newDishIngredients").value || "",
+    recipe: document.getElementById("newDishRecipe").value || "",
+    tags: document.getElementById("newDishTags").value.split(",").map(t => t.trim()).filter(Boolean),
+    favorite: false
+  };
+
+  cloudData.customDishes.push(newDish);
+  try {
+    await saveCloud();
+    prepareAllDishes();
+    renderAdmin();
+    document.querySelectorAll("#addDishForm input, #addDishForm textarea").forEach(el => el.value = '');
+    document.getElementById("addDishForm").style.display = 'none';
+  } catch(e) {
+    alert("Ошибка сохранения");
+  }
+}
+
+async function deleteCustomDish(id){
+  cloudData.customDishes = cloudData.customDishes.filter(d => d.id !== id);
+  Object.keys(cloudData.plan).forEach(date => {
+    const day = cloudData.plan[date];
+    for (const cat in day) {
+      if (day[cat] === id) delete day[cat];
+    }
+    if (Object.keys(day).length === 0) delete cloudData.plan[date];
+  });
+
+  try {
+    await saveCloud();
+    prepareAllDishes();
+    renderAdmin();
+    if (document.getElementById("mainView").style.display !== 'none') render();
+  } catch(e) {
+    alert("Ошибка удаления");
+  }
+}
+
+/* =========================================================
+   Главный экран
+   ========================================================= */
 const tabsEl = document.getElementById("tabs");
 const contentEl = document.getElementById("content");
+const searchInput = document.getElementById("searchInput");
 let active = "breakfast";
+let searchQuery = "";
 
-function init(){
+function renderCloudError(){
+  const errEl = document.getElementById("cloudError");
+  if (window._cloudLoadError) {
+    errEl.style.display = "block";
+    errEl.innerHTML = `
+      <div class="error-msg">
+        Не удалось загрузить данные.<br>Проверьте подключение к интернету.
+        <br><button id="retryCloudBtn">Повторить попытку</button>
+      </div>
+    `;
+    document.getElementById("retryCloudBtn").addEventListener("click", retryLoadCloud);
+  } else {
+    errEl.style.display = "none";
+  }
+}
+
+async function retryLoadCloud(){
+  document.getElementById("cloudError").innerHTML = `<div class="empty">Загрузка...</div>`;
+  try {
+    await loadCloud();
+    prepareAllDishes();
+    render();
+    renderCloudError();
+  } catch(e) {
+    window._cloudLoadError = true;
+    renderCloudError();
+  }
+}
+
+function renderDish(d){
+  const card = document.createElement("div");
+  card.className = "dish";
+
+  const head = document.createElement("div");
+  head.className = "dish-head";
+  head.innerHTML = `
+    <div class="dish-name">${d.name}</div>
+    <div class="dish-meta">${d.kcal} ккал · ${d.time}</div>
+  `;
+  head.addEventListener("click", () => card.classList.toggle("open"));
+
+  const body = document.createElement("div");
+  body.className = "dish-body";
+  body.innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="num">${d.kcal}</div><div class="lbl">ккал</div></div>
+      <div class="stat"><div class="num">${d.protein}г</div><div class="lbl">белки</div></div>
+      <div class="stat"><div class="num">${d.fat}г</div><div class="lbl">жиры</div></div>
+      <div class="stat"><div class="num">${d.carbs}г</div><div class="lbl">углеводы</div></div>
+    </div>
+    <div class="block">
+      <div class="block-label">Порция</div>
+      <div class="block-text">${d.portion}</div>
+    </div>
+    <div class="block">
+      <div class="block-label">Состав</div>
+      <div class="block-text">${d.ingredients}</div>
+    </div>
+    <div class="block">
+      <div class="block-label">Приготовление</div>
+      <div class="block-text">${d.recipe}</div>
+    </div>
+  `;
+
+  const favBtn = document.createElement("button");
+  favBtn.className = "fav-btn";
+  const fav = isFavorite(d);
+  favBtn.textContent = fav ? "Убрать из избранного" : "Добавить в избранное";
+  favBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleFavorite(d);
+  });
+  body.appendChild(favBtn);
+
+  card.appendChild(head);
+  card.appendChild(body);
+  return card;
+}
+
+function filterDishes(list){
+  if (!searchQuery) return list;
+  const q = searchQuery.toLowerCase();
+  return list.filter(d => {
+    const haystack = (d.name + " " + d.ingredients + " " + (d.tags||[]).join(" ") + " " + (d.recipe||"")).toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
+function render(){
+  [...tabsEl.children].forEach(b => b.classList.toggle("active", b.dataset.key === active));
+
+  const dishesForCat = allDishes.filter(d => d.category === active);
+  const filtered = filterDishes(dishesForCat);
+  contentEl.innerHTML = "";
+
+  if(filtered.length === 0){
+    contentEl.innerHTML = searchQuery
+      ? '<div class="empty">Ничего не найдено</div>'
+      : '<div class="empty">Пока ничего не добавлено</div>';
+    return;
+  }
+
+  const favorites = filtered.filter(d => isFavorite(d)).sort((a,b) => a.name.localeCompare(b.name, "ru"));
+  const others = filtered.filter(d => !isFavorite(d)).sort((a,b) => a.name.localeCompare(b.name, "ru"));
+
+  [...favorites, ...others].forEach(d => contentEl.appendChild(renderDish(d)));
+}
+
+/* =========================================================
+   Инициализация
+   ========================================================= */
+async function init(){
   document.getElementById("today").textContent = new Date().toLocaleDateString("ru-RU", {
     weekday: "long", day: "numeric", month: "long"
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => setView(btn.dataset.view));
+  });
+
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', () => setView('main'));
+  });
+
+  searchInput.addEventListener("input", (e) => {
+    searchQuery = e.target.value.trim();
+    render();
   });
 
   CATEGORIES.forEach(cat => {
@@ -335,60 +1190,14 @@ function init(){
     tabsEl.appendChild(btn);
   });
 
-  render();
-}
-
-function render(){
-  [...tabsEl.children].forEach(b => b.classList.toggle("active", b.dataset.key === active));
-
-  const dishes = MENU[active] || [];
-  contentEl.innerHTML = "";
-
-  if(dishes.length === 0){
-    contentEl.innerHTML = '<div class="empty">Пока ничего не добавлено</div>';
-    return;
+  try {
+    await loadCloud();
+  } catch(e) {
+    window._cloudLoadError = true;
   }
-
-  dishes.forEach(d => {
-    const card = document.createElement("div");
-    card.className = "dish";
-
-    const head = document.createElement("div");
-    head.className = "dish-head";
-    head.innerHTML = `
-      <div class="dish-name">${d.name}</div>
-      <div class="dish-meta">${d.kcal} ккал · ${d.time}</div>
-    `;
-    head.addEventListener("click", () => card.classList.toggle("open"));
-
-    const body = document.createElement("div");
-    body.className = "dish-body";
-    body.innerHTML = `
-      <div class="stats">
-        <div class="stat"><div class="num">${d.kcal}</div><div class="lbl">ккал</div></div>
-        <div class="stat"><div class="num">${d.protein}г</div><div class="lbl">белки</div></div>
-        <div class="stat"><div class="num">${d.fat}г</div><div class="lbl">жиры</div></div>
-        <div class="stat"><div class="num">${d.carbs}г</div><div class="lbl">углеводы</div></div>
-      </div>
-      <div class="block">
-        <div class="block-label">Порция</div>
-        <div class="block-text">${d.portion}</div>
-      </div>
-      <div class="block">
-        <div class="block-label">Состав</div>
-        <div class="block-text">${d.ingredients}</div>
-      </div>
-      <div class="block">
-        <div class="block-label">Приготовление</div>
-        <div class="block-text">${d.recipe}</div>
-      </div>
-      ${d.tags && d.tags.length ? `<div class="tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>` : ""}
-    `;
-
-    card.appendChild(head);
-    card.appendChild(body);
-    contentEl.appendChild(card);
-  });
+  prepareAllDishes();
+  setView('main');
+  renderCloudError();
 }
 
 init();
