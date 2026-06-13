@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Меню</title>
+<style>
+  :root{
+    --paper:#FBF8F2;
+    --ink:#2C2C2A;
+    --muted:#8A8780;
+    --line:#E4DFD3;
+    --accent:#9E5A33;
+    --accent-bg:#F5E6D8;
+    --tag-bg:#EFEAE0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding: 24px 16px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px; margin:0 auto;}
+
+  header{
+    text-align:center;
+    padding: 8px 0 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+  header .eyebrow{
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  header h1{
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  header .date{
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  nav{
+    display:flex;
+    gap: 6px;
+    overflow-x:auto;
+    padding: 18px 0 4px;
+    margin-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  nav button{
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    padding: 7px 16px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  nav button.active{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .section-title{
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 22px 0 10px 2px;
+  }
+
+  .dish{
+    border-bottom: 1px solid var(--line);
+    padding: 16px 2px;
+  }
+  .dish:last-child{ border-bottom: none; }
+
+  .dish-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .dish-name{
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.35;
+  }
+  .dish-meta{
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .dish-body{
+    display:none;
+    margin-top: 14px;
+    font-family: -apple-system, sans-serif;
+  }
+  .dish.open .dish-body{ display:block; }
+  .dish.open .dish-name{ color: var(--accent); }
+
+  .stats{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .stat{
+    background: var(--accent-bg);
+    border-radius: 6px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+  .stat .num{ font-size: 15px; font-weight: 600; color: var(--accent); }
+  .stat .lbl{ font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+  .block{ margin-bottom: 12px; }
+  .block:last-child{ margin-bottom: 0; }
+  .block-label{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .block-text{
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .tags{
+    display:flex; flex-wrap:wrap; gap:6px; margin-top: 10px;
+  }
+  .tag{
+    font-size: 11px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+
+  .empty{
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    text-align:center;
+    padding: 30px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Домашнее меню</div>
+    <h1>Что у нас на сегодня</h1>
+    <div class="date" id="today"></div>
+  </header>
+
+  <nav id="tabs"></nav>
+
+  <div id="content"></div>
+
+</div>
+
+<script>
+/* =========================================================
+   БАЗА БЛЮД
+   Чтобы добавить блюдо — скопируйте один объект {...} внутри
+   нужной категории (breakfast / lunch / dinner / snack)
+   и поменяйте значения. id должен быть уникальным.
+   ========================================================= */
+
+const MENU = {
+  breakfast: [
+    {
+      id: "oatmeal",
+      name: "Овсянка с ягодами и орехами",
+      kcal: 320,
+      portion: "300 г",
+      time: "10 мин",
+      ingredients: "Овсяные хлопья (50 г), молоко (200 мл), черника (50 г), грецкий орех (15 г), мёд (1 ч.л.)",
+      protein: 12, fat: 9, carbs: 45,
+      recipe: "Залить хлопья молоком, варить на среднем огне 5 минут, помешивая. Снять с огня, добавить ягоды, орехи и мёд.",
+      tags: ["вегетарианское", "быстро"]
+    },
+    {
+      id: "syrniki",
+      name: "Творожные оладьи",
+      kcal: 280,
+      portion: "250 г (4 шт)",
+      time: "20 мин",
+      ingredients: "Творог (200 г), яйцо (1 шт), мука (3 ст.л.), сахар (1 ст.л.), сметана для подачи",
+      protein: 22, fat: 11, carbs: 24,
+      recipe: "Смешать творог, яйцо, сахар и муку до однородности. Сформировать оладьи, обжарить на среднем огне по 3 минуты с каждой стороны.",
+      tags: ["высокий белок"]
+    }
+  ],
+
+  lunch: [
+    {
+      id: "soup-chicken",
+      name: "Куриный суп с овощами",
+      kcal: 310,
+      portion: "400 мл",
+      time: "40 мин",
+      ingredients: "Куриное филе (150 г), картофель (100 г), морковь (50 г), лук (30 г), бульон (350 мл)",
+      protein: 28, fat: 8, carbs: 22,
+      recipe: "Куриное филе отварить в бульоне 20 минут. Добавить нарезанные овощи, варить ещё 15 минут до готовности.",
+      tags: ["сытно", "на обед"]
+    },
+    {
+      id: "buckwheat-beef",
+      name: "Гречка с говядиной и овощами",
+      kcal: 480,
+      portion: "350 г",
+      time: "35 мин",
+      ingredients: "Говядина (150 г), гречка (80 г сухой), болгарский перец (50 г), лук (30 г)",
+      protein: 34, fat: 14, carbs: 48,
+      recipe: "Говядину обжарить до румяной корочки, добавить лук и перец, тушить 15 минут. Гречку отварить отдельно, подавать вместе.",
+      tags: ["высокий белок", "сытно"]
+    }
+  ],
+
+  dinner: [
+    {
+      id: "salmon-veg",
+      name: "Лосось на пару с овощами",
+      kcal: 380,
+      portion: "300 г",
+      time: "25 мин",
+      ingredients: "Филе лосося (150 г), брокколи (100 г), цукини (80 г), лимон, оливковое масло",
+      protein: 30, fat: 22, carbs: 8,
+      recipe: "Лосось и нарезанные овощи готовить на пару 12-15 минут. Перед подачей сбрызнуть оливковым маслом и лимонным соком.",
+      tags: ["лёгкое", "на ужин"]
+    },
+    {
+      id: "chicken-rice",
+      name: "Куриные бёдра с рисом",
+      kcal: 420,
+      portion: "350 г",
+      time: "45 мин",
+      ingredients: "Куриные бёдра (200 г), рис (70 г сухого), чеснок, паприка, соевый соус",
+      protein: 32, fat: 16, carbs: 38,
+      recipe: "Бёдра замариновать в соевом соусе с чесноком и паприкой на 15 минут, запекать при 200°C 30 минут. Рис отварить отдельно.",
+      tags: ["сытно"]
+    }
+  ],
+
+  snack: [
+    {
+      id: "yogurt-nuts",
+      name: "Йогурт с орехами и мёдом",
+      kcal: 180,
+      portion: "150 г",
+      time: "2 мин",
+      ingredients: "Греческий йогурт (150 г), миндаль (10 г), мёд (1 ч.л.)",
+      protein: 10, fat: 7, carbs: 18,
+      recipe: "Выложить йогурт в миску, посыпать орехами и полить мёдом.",
+      tags: ["быстро", "вегетарианское"]
+    },
+    {
+      id: "apple-peanut",
+      name: "Яблоко с арахисовой пастой",
+      kcal: 200,
+      portion: "1 яблоко + 20 г пасты",
+      time: "2 мин",
+      ingredients: "Яблоко (1 шт), арахисовая паста (20 г)",
+      protein: 6, fat: 10, carbs: 24,
+      recipe: "Нарезать яблоко дольками, подавать с арахисовой пастой для дип-соуса.",
+      tags: ["быстро", "вегетарианское"]
+    }
+  ]
+};
+
+const CATEGORIES = [
+  { key: "breakfast", label: "Завтрак" },
+  { key: "lunch", label: "Обед" },
+  { key: "dinner", label: "Ужин" },
+  { key: "snack", label: "Перекус" }
+];
+
+/* ========================================================= */
+
+const tabsEl = document.getElementById("tabs");
+const contentEl = document.getElementById("content");
+let active = "breakfast";
+
+function init(){
+  document.getElementById("today").textContent = new Date().toLocaleDateString("ru-RU", {
+    weekday: "long", day: "numeric", month: "long"
+  });
+
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.textContent = cat.label;
+    btn.dataset.key = cat.key;
+    if(cat.key === active) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      active = cat.key;
+      render();
+    });
+    tabsEl.appendChild(btn);
+  });
+
+  render();
+}
+
+function render(){
+  [...tabsEl.children].forEach(b => b.classList.toggle("active", b.dataset.key === active));
+
+  const dishes = MENU[active] || [];
+  contentEl.innerHTML = "";
+
+  if(dishes.length === 0){
+    contentEl.innerHTML = '<div class="empty">Пока ничего не добавлено</div>';
+    return;
+  }
+
+  dishes.forEach(d => {
+    const card = document.createElement("div");
+    card.className = "dish";
+
+    const head = document.createElement("div");
+    head.className = "dish-head";
+    head.innerHTML = `
+      <div class="dish-name">${d.name}</div>
+      <div class="dish-meta">${d.kcal} ккал · ${d.time}</div>
+    `;
+    head.addEventListener("click", () => card.classList.toggle("open"));
+
+    const body = document.createElement("div");
+    body.className = "dish-body";
+    body.innerHTML = `
+      <div class="stats">
+        <div class="stat"><div class="num">${d.kcal}</div><div class="lbl">ккал</div></div>
+        <div class="stat"><div class="num">${d.protein}г</div><div class="lbl">белки</div></div>
+        <div class="stat"><div class="num">${d.fat}г</div><div class="lbl">жиры</div></div>
+        <div class="stat"><div class="num">${d.carbs}г</div><div class="lbl">углеводы</div></div>
+      </div>
+      <div class="block">
+        <div class="block-label">Порция</div>
+        <div class="block-text">${d.portion}</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Состав</div>
+        <div class="block-text">${d.ingredients}</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Приготовление</div>
+        <div class="block-text">${d.recipe}</div>
+      </div>
+      ${d.tags && d.tags.length ? `<div class="tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>` : ""}
+    `;
+
+    card.appendChild(head);
+    card.appendChild(body);
+    contentEl.appendChild(card);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
