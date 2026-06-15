@@ -5,30 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Домашнее меню</title>
 <style>
-  :root{
-    --paper:#FBF8F2;--ink:#2C2C2A;--muted:#8A8780;--line:#E4DFD3;--accent:#9E5A33;--accent-bg:#F5E6D8;
-  }
+  :root{--paper:#FBF8F2;--ink:#2C2C2A;--muted:#8A8780;--line:#E4DFD3;--accent:#9E5A33;--accent-bg:#F5E6D8;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Georgia','Times New Roman',serif;background:var(--paper);color:var(--ink);padding:24px 16px 80px;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:480px;margin:0 auto;}
- 
-  header{text-align:center;padding:8px 0 20px;border-bottom:1px solid var(--line);margin-bottom:8px;}
-  header h1{font-size:32px;font-weight:400;letter-spacing:0.02em;color:var(--accent);}
-  header .date{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-top:6px;}
- 
-  .nav-actions{display:flex;gap:8px;margin-top:16px;align-items:stretch;}
-  .nav-btn{flex:1;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;letter-spacing:0.02em;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:11px 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;}
+
+  header{text-align:center;padding:8px 0 16px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+  header h1{font-size:30px;font-weight:400;letter-spacing:0.02em;color:var(--accent);}
+  header .date{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-top:4px;}
+
+  .nav-actions{display:flex;gap:8px;margin-top:12px;align-items:stretch;}
+  .nav-btn{flex:1;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:10px 8px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;}
   .nav-btn.active{background:var(--ink);color:var(--paper);}
   .nav-btn:active{opacity:0.7;}
-  .admin-btn{flex:0 0 auto;width:44px;padding:11px 0;font-size:18px;line-height:1;}
- 
+  .admin-btn{flex:0 0 auto;width:44px;padding:10px 0;font-size:18px;line-height:1;}
+
   .search-box{width:100%;font-family:-apple-system,sans-serif;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:18px 0 10px;outline:none;}
   .search-box:focus{border-color:var(--accent);}
- 
+
   nav{display:flex;gap:6px;overflow-x:auto;padding:4px 0;margin-bottom:6px;-webkit-overflow-scrolling:touch;}
   nav button{font-family:-apple-system,sans-serif;font-size:13px;letter-spacing:0.04em;border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 16px;border-radius:999px;white-space:nowrap;flex-shrink:0;cursor:pointer;}
   nav button.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
- 
+
   .dish{border-bottom:1px solid var(--line);padding:16px 2px;}
   .dish:last-child{border-bottom:none;}
   .dish-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;cursor:pointer;}
@@ -38,31 +36,32 @@
   .dish-body{display:none;margin-top:14px;font-family:-apple-system,sans-serif;}
   .dish.open .dish-body{display:block;}
   .dish.open .dish-name{color:var(--accent);}
- 
+
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
   .stat{background:var(--accent-bg);border-radius:6px;padding:8px 4px;text-align:center;}
   .stat .num{font-size:15px;font-weight:600;color:var(--accent);}
   .stat .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;}
- 
+
   .block{margin-bottom:12px;}
   .block:last-child{margin-bottom:0;}
   .block-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;}
   .block-text{font-size:14px;line-height:1.6;color:var(--ink);}
- 
+
   .btn-row{display:flex;gap:8px;margin-top:14px;}
-  .fav-btn,.plan-dish-btn,.edit-btn{font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:none;color:var(--accent);background:var(--accent-bg);padding:11px;border-radius:8px;text-align:center;cursor:pointer;}
+  .fav-btn,.plan-dish-btn,.edit-btn,.secondary-btn{font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:none;color:var(--accent);background:var(--accent-bg);padding:11px;border-radius:8px;text-align:center;cursor:pointer;}
   .fav-btn{flex:1;}.plan-dish-btn{flex:1;}
-  .fav-btn:active,.plan-dish-btn:active,.edit-btn:active{color:var(--paper);background:var(--accent);}
+  .fav-btn:active,.plan-dish-btn:active,.edit-btn:active,.secondary-btn:active{color:var(--paper);background:var(--accent);}
   .save-btn{width:100%;font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;border:none;color:var(--paper);background:var(--ink);padding:13px;border-radius:8px;text-align:center;cursor:pointer;margin-top:8px;}
   .save-btn:active{opacity:0.7;}
+  .save-btn:disabled{opacity:0.4;cursor:default;}
+  .secondary-outline-btn{background:transparent;color:var(--ink);border:1px solid var(--ink);}
   .edit-btn{width:100%;margin-top:12px;}
- 
+
   .empty{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);text-align:center;padding:30px 0;}
   .sync-status{font-family:-apple-system,sans-serif;font-size:12px;color:var(--muted);text-align:center;margin-top:12px;min-height:16px;}
   .view-title{font-size:22px;font-weight:400;margin-bottom:4px;}
   .view-subtitle{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-bottom:20px;}
- 
-  /* День-навигация (план и история) */
+
   .day-nav{display:flex;align-items:center;justify-content:space-between;margin:16px 0 4px;}
   .day-nav-btn{font-family:-apple-system,sans-serif;font-size:26px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 10px;line-height:1;}
   .day-nav-btn:disabled{opacity:0.2;}
@@ -70,28 +69,53 @@
   .day-nav-label .day-name{font-size:17px;font-weight:500;}
   .day-nav-label .day-date{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-top:2px;}
   .day-past-badge{font-family:-apple-system,sans-serif;font-size:11px;color:var(--muted);background:var(--line);padding:2px 10px;border-radius:999px;margin-bottom:12px;display:inline-block;}
- 
-  /* Карточки плана / истории */
+
   .today-card{border-bottom:1px solid var(--line);padding:14px 2px;position:relative;}
   .today-card:last-child{border-bottom:none;}
   .today-card .cat-label{font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:4px;}
   .today-card .dish-name-plain{font-size:18px;}
   .today-card .dish-meta{font-family:-apple-system,sans-serif;font-size:12px;color:var(--muted);margin-top:2px;}
-  .today-stats{margin-top:20px;padding:14px 2px;}
-  .today-stats .stats-title{font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;}
- 
-  /* Форма планирования */
+  .card-edit-btn{position:absolute;right:2px;top:14px;padding:4px 10px;font-size:13px;border:none;color:var(--accent);background:var(--accent-bg);border-radius:8px;cursor:pointer;font-family:-apple-system,sans-serif;font-weight:500;}
+  .card-edit-btn:active{color:var(--paper);background:var(--accent);}
+  .local-edit-form{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .today-card.expanded .local-edit-form{display:block;}
+
+  /* ===================== ИТОГО ЗА ДЕНЬ ===================== */
+  .day-totals{margin-top:20px;background:var(--accent-bg);border-radius:10px;padding:14px;}
+  .day-totals-title{font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;}
+  .day-totals-profiles{display:block;}
+
+  .profile-totals{background:var(--paper);border-radius:9px;padding:12px;margin-bottom:10px;}
+  .profile-totals:last-child{margin-bottom:0;}
+  .profile-totals-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+  .kpi-cell{background:var(--accent-bg);border-radius:7px;padding:8px 4px;text-align:center;}
+  .kpi-cell-val{font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;color:var(--accent);line-height:1.1;overflow-wrap:anywhere;}
+  .kpi-cell-val.over{color:#c0392b;}
+  .kpi-cell-lbl{font-family:-apple-system,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:2px;}
+  .profile-goal-bar{height:5px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:10px;}
+  .profile-goal-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.3s;}
+  .profile-goal-bar-fill.over{background:#c0392b;}
+  .profile-goal-text{font-family:-apple-system,sans-serif;font-size:10px;color:var(--muted);margin-top:4px;text-align:right;}
+
+  /* ===================== ПРЕВЬЮ КБЖУ в попапах — единый стиль ===================== */
+  /* Сетка 2×2 для порций (без /цели) */
+  .portion-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+  .portion-kpi-cell{background:var(--accent-bg);border-radius:7px;padding:8px 6px;text-align:center;}
+  .portion-kpi-val{font-family:-apple-system,sans-serif;font-size:15px;font-weight:700;color:var(--accent);line-height:1.1;}
+  .portion-kpi-lbl{font-family:-apple-system,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-top:3px;}
+
+  /* Кнопка съедено */
+  .eaten-btn{font-family:-apple-system,sans-serif;font-size:12px;font-weight:500;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;margin-top:6px;display:inline-block;}
+  .eaten-btn.not-eaten{background:var(--line);color:var(--muted);}
+  .eaten-btn.eaten{background:var(--accent-bg);color:var(--accent);}
+  .eaten-btn:active{opacity:0.7;}
+
   .plan-row{margin-bottom:16px;}
   .plan-row label{display:block;font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px;}
   .plan-row select{width:100%;font-family:-apple-system,sans-serif;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:11px 12px;appearance:none;cursor:pointer;}
- 
-  /* Раскрывающаяся форма порции */
-  .local-edit-form{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
-  .today-card.expanded .local-edit-form{display:block;}
-  .card-edit-btn{position:absolute;right:12px;top:12px;padding:4px 10px;font-size:14px;border:none;color:var(--accent);background:var(--accent-bg);border-radius:8px;cursor:pointer;font-family:-apple-system,sans-serif;font-weight:500;}
-  .card-edit-btn:active{color:var(--paper);background:var(--accent);}
- 
-  /* Покупки */
+
   .shop-range{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
   .shop-range-btn{font-family:-apple-system,sans-serif;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer;}
   .shop-range-btn.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
@@ -101,10 +125,9 @@
   .shop-check{width:20px;height:20px;flex-shrink:0;border:1.5px solid var(--line);border-radius:4px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--accent);}
   .shop-item.checked .shop-check{background:var(--accent-bg);border-color:var(--accent);}
   .shop-text{font-family:-apple-system,sans-serif;font-size:15px;line-height:1.4;}
-  .shop-source{font-size:11px;color:var(--muted);margin-top:2px;font-family:-apple-system,sans-serif;}
- 
-  /* Попап */
+
   .popup-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.4);z-index:100;display:flex;align-items:flex-end;justify-content:center;}
+  .popup-overlay.center{align-items:center;padding:20px;}
   .popup-box{position:relative;background:var(--paper);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
   .popup-title{font-size:18px;font-weight:400;margin-bottom:4px;color:var(--accent);padding-right:30px;}
   .popup-subtitle{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-bottom:20px;}
@@ -118,8 +141,50 @@
   .popup-toggle.off{background:var(--line);color:var(--muted);}
   .popup-save-btn{width:100%;margin-top:20px;font-family:-apple-system,sans-serif;font-size:14px;font-weight:500;border:none;color:var(--paper);background:var(--ink);padding:14px;border-radius:10px;cursor:pointer;}
   .popup-save-btn:active{opacity:0.7;}
- 
-  /* Админка */
+
+  /* Попап съедено */
+  .eaten-popup-box{position:relative;background:var(--paper);border-radius:16px;padding:24px 20px 28px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+  .eaten-popup-title{font-size:18px;font-weight:400;margin-bottom:4px;color:var(--accent);padding-right:30px;}
+  .eaten-popup-sub{font-family:-apple-system,sans-serif;font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .eaten-profile-label{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-bg);display:inline-block;padding:5px 12px;border-radius:999px;margin-bottom:18px;}
+  .eaten-input-row{display:flex;gap:8px;align-items:center;margin-bottom:4px;}
+  .eaten-input-row input{flex:1;font-family:-apple-system,sans-serif;font-size:18px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;outline:none;text-align:center;}
+  .eaten-input-row input:focus{border-color:var(--accent);}
+  .eaten-input-row .unit-label{font-family:-apple-system,sans-serif;font-size:15px;color:var(--muted);}
+  .eaten-clear-btn{width:100%;margin-top:8px;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:none;color:var(--muted);background:var(--line);padding:11px;border-radius:8px;cursor:pointer;}
+  .eaten-clear-btn:active{opacity:0.7;}
+
+  /* ===================== НАСТРОЙКИ — вкладки ===================== */
+  .admin-tabs-top{display:flex;gap:8px;margin-bottom:20px;}
+  .admin-tab-btn{flex:1;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:1px solid var(--line);background:transparent;color:var(--muted);padding:9px 12px;border-radius:8px;cursor:pointer;text-align:center;}
+  .admin-tab-btn.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+
+  .settings-section{margin-bottom:24px;}
+  .settings-section-title{font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+
+  /* Статичный вид целей */
+  .goals-view{background:var(--accent-bg);border-radius:10px;padding:14px;}
+  .goals-profile-block{margin-bottom:16px;}
+  .goals-profile-block:last-child{margin-bottom:0;}
+  .goals-profile-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .goals-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+  .goals-kpi-cell{background:var(--paper);border-radius:7px;padding:8px 4px;text-align:center;}
+  .goals-kpi-val{font-family:-apple-system,sans-serif;font-size:15px;font-weight:700;color:var(--accent);}
+  .goals-kpi-lbl{font-family:-apple-system,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:2px;}
+  .goals-edit-btn{width:100%;margin-top:12px;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:10px;border-radius:8px;cursor:pointer;}
+  .goals-edit-btn:active{background:var(--ink);color:var(--paper);}
+
+  /* Форма редактирования целей */
+  .goals-edit-form{display:none;margin-top:16px;}
+  .goals-edit-form.open{display:block;}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .settings-row label{font-family:-apple-system,sans-serif;font-size:14px;color:var(--ink);}
+  .settings-row input{width:90px;font-family:-apple-system,sans-serif;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;text-align:right;}
+  .settings-row input:focus{border-color:var(--accent);}
+  .profile-edit-block{margin-bottom:20px;}
+  .profile-edit-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+
+  /* Блюда в админке */
   .admin-cat-tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0;margin-bottom:6px;-webkit-overflow-scrolling:touch;}
   .admin-cat-tab{font-family:-apple-system,sans-serif;font-size:13px;letter-spacing:0.04em;border:1px solid var(--line);background:transparent;color:var(--muted);padding:7px 16px;border-radius:999px;white-space:nowrap;flex-shrink:0;cursor:pointer;}
   .admin-cat-tab.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
@@ -140,33 +205,25 @@
   }
   .add-dish-form textarea,.admin-edit-form textarea{resize:vertical;min-height:70px;}
   .add-dish-form label,.admin-edit-form label{font-family:-apple-system,sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:4px;display:block;}
- 
-  /* Вспомогательные */
+
   .flex-row{display:flex;gap:8px;}
-  .flex-1{flex:1;}
-  .mt-4{margin-top:4px;}
+  .mt-8{margin-top:8px;}
   .mt-12{margin-top:12px;}
-  .mb-12{margin-bottom:12px;}
-  .mb-14{margin-bottom:14px;}
-  .preview-block{padding:12px;background:var(--accent-bg);border-radius:8px;}
-  .preview-stats{display:flex;gap:12px;font-family:-apple-system,sans-serif;font-size:13px;flex-wrap:wrap;}
-  .preview-stats span{font-weight:600;color:var(--accent);}
   .hint-text{font-size:11px;color:var(--muted);margin-top:4px;font-family:-apple-system,sans-serif;}
   .portion-hint{font-size:11px;color:var(--muted);margin-top:4px;font-family:-apple-system,sans-serif;}
- 
-  /* Загрузка */
+
   .loading-overlay{position:fixed;inset:0;background:var(--paper);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:-apple-system,sans-serif;color:var(--muted);}
   .loading-spinner{width:40px;height:40px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:12px;}
   @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
- 
+
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-spinner"></div>
   <div>Загрузка меню…</div>
 </div>
- 
+
 <div class="wrap">
   <header>
     <h1>Домашнее меню</h1>
@@ -179,13 +236,13 @@
       <button class="nav-btn admin-btn" data-view="admin" title="Управление">⚙</button>
     </div>
   </header>
- 
+
   <div id="mainView">
     <nav id="tabs"></nav>
     <input type="text" class="search-box" id="searchInput" placeholder="Поиск блюда…">
     <div id="content"></div>
   </div>
- 
+
   <div id="planView" style="display:none;">
     <div class="day-nav">
       <button class="day-nav-btn" id="dayPrev">‹</button>
@@ -198,17 +255,20 @@
     <div id="planDayBadge" style="text-align:center;margin-bottom:12px;"></div>
     <div id="planContent"></div>
     <div id="planEditForm" style="display:none;"></div>
-    <button class="save-btn" id="planSaveBtn" style="display:none;">Сохранить</button>
+    <div class="flex-row mt-8" id="planEditActions" style="display:none;">
+      <button class="save-btn" id="planSaveBtn" style="flex:1;">Сохранить</button>
+      <button class="save-btn secondary-outline-btn" id="planCancelBtn" style="flex:1;">Отмена</button>
+    </div>
     <div class="sync-status" id="planStatus"></div>
   </div>
- 
+
   <div id="shopView" style="display:none;">
     <div class="view-title">Список покупок</div>
     <div class="view-subtitle">Ингредиенты из запланированных блюд</div>
     <div class="shop-range" id="shopRange"></div>
     <div id="shopContent"></div>
   </div>
- 
+
   <div id="historyView" style="display:none;">
     <div class="day-nav">
       <button class="day-nav-btn" id="histPrev">‹</button>
@@ -220,17 +280,36 @@
     </div>
     <div id="historyContent"></div>
   </div>
- 
+
   <div id="adminView" style="display:none;">
-    <div class="view-title">Управление блюдами</div>
-    <div class="view-subtitle">Добавление, редактирование и удаление блюд</div>
-    <div class="admin-cat-tabs" id="adminTabs"></div>
-    <div id="adminDishList"></div>
-    <button class="fav-btn" id="showAddFormBtn" style="margin-top:16px;display:block;width:100%;">+ Добавить блюдо</button>
-    <div id="addDishForm" class="add-dish-form" style="display:none;"></div>
+    <!-- Вкладки верхнего уровня -->
+    <div class="admin-tabs-top">
+      <button class="admin-tab-btn active" data-admin-tab="goals">Цели по КБЖУ</button>
+      <button class="admin-tab-btn" data-admin-tab="dishes">Редактирование блюд</button>
+    </div>
+
+    <!-- Вкладка: Цели -->
+    <div id="adminGoalsTab">
+      <div class="goals-view" id="goalsStaticView"></div>
+      <button class="goals-edit-btn" id="goalsEditToggleBtn">Изменить цели</button>
+      <div class="goals-edit-form" id="goalsEditForm">
+        <div id="profileSettings"></div>
+        <button class="save-btn" id="saveSettingsBtn">Сохранить цели</button>
+        <div class="sync-status" id="settingsStatus"></div>
+      </div>
+    </div>
+
+    <!-- Вкладка: Блюда -->
+    <div id="adminDishesTab" style="display:none;">
+      <div class="admin-cat-tabs" id="adminTabs"></div>
+      <div id="adminDishList"></div>
+      <button class="fav-btn" id="showAddFormBtn" style="margin-top:16px;display:block;width:100%;">+ Добавить блюдо</button>
+      <div id="addDishForm" class="add-dish-form" style="display:none;"></div>
+    </div>
   </div>
 </div>
- 
+
+<!-- Попап планирования -->
 <div class="popup-overlay" id="planPopup" style="display:none;">
   <div class="popup-box">
     <button class="popup-close" id="popupClose">×</button>
@@ -241,84 +320,110 @@
     <div class="sync-status" id="popupStatus"></div>
   </div>
 </div>
- 
+
+<!-- Попап съедено -->
+<div class="popup-overlay center" id="eatenPopup" style="display:none;">
+  <div class="eaten-popup-box">
+    <button class="popup-close" id="eatenPopupClose">×</button>
+    <div class="eaten-popup-title" id="eatenDishName"></div>
+    <div class="eaten-popup-sub" id="eatenDishBase"></div>
+    <div class="eaten-profile-label" id="eatenProfileLabel"></div>
+    <div class="eaten-input-row">
+      <input type="number" id="eatenPortionInput" placeholder="0" min="0">
+      <span class="unit-label">г</span>
+    </div>
+    <!-- Новый превью КБЖУ 2×2 -->
+    <div id="eatenPreview"></div>
+    <button class="save-btn" id="eatenSaveBtn" style="margin-top:14px;">Сохранить</button>
+    <button class="eaten-clear-btn" id="eatenClearBtn">Очистить запись</button>
+    <div class="sync-status" id="eatenStatus"></div>
+  </div>
+</div>
+
+<!-- Подтверждение действия -->
+<div class="popup-overlay center" id="confirmPopup" style="display:none;">
+  <div class="eaten-popup-box">
+    <div class="eaten-popup-title" id="confirmTitle">Подтверждение</div>
+    <div class="eaten-popup-sub" id="confirmMessage"></div>
+    <div class="flex-row mt-12">
+      <button class="save-btn" id="confirmYesBtn" style="flex:1;">Да</button>
+      <button class="save-btn secondary-outline-btn" id="confirmNoBtn" style="flex:1;">Отмена</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ==========================================================
+/* ============================================================
    КОНФИГУРАЦИЯ
-   ========================================================== */
+   ============================================================ */
 const MENU = { breakfast:[], lunch:[], dinner:[], snack:[] };
- 
 const CATEGORIES = [
   {key:"breakfast", label:"Завтрак"},
   {key:"lunch",     label:"Обед"},
   {key:"dinner",    label:"Ужин"},
   {key:"snack",     label:"Перекус"}
 ];
- 
-const JSONBIN_KEY  = "$2a$10$4wA7T6em0ATgsI36drn8Ie4xNUEB77cklSxKuv7LOXVJbQAhds2Xe";
-const DISHES_URL   = "https://api.jsonbin.io/v3/b/6a2edef1f5f4af5e29f0fb74";
-const PLAN_URL     = "https://api.jsonbin.io/v3/b/6a2edf1bda38895dfebf7989";
- 
+const PROFILES = [
+  {uid:"dima",   name:"Дима"},
+  {uid:"natela", name:"Натела"}
+];
+
+const JSONBIN_KEY = "$2a$10$4wA7T6em0ATgsI36drn8Ie4xNUEB77cklSxKuv7LOXVJbQAhds2Xe";
+const DISHES_URL  = "https://api.jsonbin.io/v3/b/6a2edef1f5f4af5e29f0fb74";
+const PLAN_URL    = "https://api.jsonbin.io/v3/b/6a2edf1bda38895dfebf7989";
+const EATEN_URL   = "https://api.jsonbin.io/v3/b/6a2da444da38895dfebb3efa";
+
 let cloudDishes = [];
 let cloudPlan   = { plan:{}, favorites:{} };
+let cloudEaten  = { goals:{ dima:{kcal:2000,protein:120,fat:70,carbs:200}, natela:{kcal:1600,protein:100,fat:55,carbs:160} } };
 let allDishes   = [];
- 
-/* ==========================================================
-   JSONBIN — загрузка / сохранение
-   ========================================================== */
-async function loadDishes(){
-  const res = await fetch(DISHES_URL+"/latest",{headers:{"X-Master-Key":JSONBIN_KEY}});
+
+/* ============================================================
+   JSONBIN
+   ============================================================ */
+async function apiFetch(url, options={}){
+  const res = await fetch(url, {
+    headers:{"X-Master-Key":JSONBIN_KEY,"Content-Type":"application/json"},
+    ...options
+  });
   if(!res.ok) throw new Error("HTTP "+res.status);
-  const data = await res.json();
-  cloudDishes = data.record?.customDishes || [];
+  return res.json();
 }
- 
-async function saveDishes(){
-  const res = await fetch(DISHES_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":JSONBIN_KEY},body:JSON.stringify({customDishes:cloudDishes})});
-  if(!res.ok) throw new Error("HTTP "+res.status);
-}
- 
+async function loadDishes(){ const d=await apiFetch(DISHES_URL+"/latest"); cloudDishes=d.record?.customDishes||[]; }
+async function saveDishes(){ await apiFetch(DISHES_URL,{method:"PUT",body:JSON.stringify({customDishes:cloudDishes})}); }
 async function loadPlan(){
-  const res = await fetch(PLAN_URL+"/latest",{headers:{"X-Master-Key":JSONBIN_KEY}});
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  const data = await res.json();
-  cloudPlan = data.record || {plan:{},favorites:{}};
-  cloudPlan.plan      = cloudPlan.plan      || {};
-  cloudPlan.favorites = cloudPlan.favorites || {};
+  const d=await apiFetch(PLAN_URL+"/latest");
+  cloudPlan=d.record||{plan:{},favorites:{}};
+  cloudPlan.plan=cloudPlan.plan||{}; cloudPlan.favorites=cloudPlan.favorites||{};
 }
- 
-async function savePlan(){
-  const res = await fetch(PLAN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":JSONBIN_KEY},body:JSON.stringify(cloudPlan)});
-  if(!res.ok) throw new Error("HTTP "+res.status);
+async function savePlan(){ await apiFetch(PLAN_URL,{method:"PUT",body:JSON.stringify(cloudPlan)}); }
+async function loadEaten(){
+  const d=await apiFetch(EATEN_URL+"/latest");
+  cloudEaten=d.record||{};
+  if(!cloudEaten.goals) cloudEaten.goals={ dima:{kcal:2000,protein:120,fat:70,carbs:200}, natela:{kcal:1600,protein:100,fat:55,carbs:160} };
+  PROFILES.forEach(p=>{ if(!cloudEaten.goals[p.uid]) cloudEaten.goals[p.uid]={kcal:2000,protein:120,fat:70,carbs:200}; });
 }
- 
-/* ==========================================================
+async function saveEaten(){ await apiFetch(EATEN_URL,{method:"PUT",body:JSON.stringify(cloudEaten)}); }
+
+/* ============================================================
    БЛЮДА
-   ========================================================== */
+   ============================================================ */
 function prepareAllDishes(){
-  allDishes = [];
+  allDishes=[];
   for(const cat of CATEGORIES) (MENU[cat.key]||[]).forEach(d=>allDishes.push({...d,category:cat.key,isCustom:false}));
   cloudDishes.forEach(d=>allDishes.push({...d,isCustom:true}));
 }
- 
 function getDishById(id){ return allDishes.find(d=>d.id===id); }
- 
-// Совместимость: план хранит либо строку dishId, либо объект {dishId, customPortion, customNote}
-function getDishId(val){ return typeof val==="object" ? val?.dishId : val; }
- 
-function isFavorite(dish){ return cloudPlan.favorites[dish.id] ?? !!dish.favorite; }
- 
+function getDishId(val){ return typeof val==="object"?val?.dishId:val; }
+function isFavorite(dish){ return cloudPlan.favorites[dish.id]??!!dish.favorite; }
 async function toggleFavorite(dish){
-  const prev = isFavorite(dish);
-  cloudPlan.favorites[dish.id] = !prev;
-  render();
-  try{ await savePlan(); }
-  catch(e){ cloudPlan.favorites[dish.id]=prev; alert("Не удалось сохранить избранное."); render(); }
+  const prev=isFavorite(dish); cloudPlan.favorites[dish.id]=!prev; render();
+  try{ await savePlan(); } catch(e){ cloudPlan.favorites[dish.id]=prev; alert("Не удалось сохранить."); render(); }
 }
- 
-/* ==========================================================
+
+/* ============================================================
    УТИЛИТЫ ДАТ
-   ========================================================== */
+   ============================================================ */
 function dateStr(offset=0){
   const d=new Date(); d.setDate(d.getDate()+offset);
   return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -326,25 +431,95 @@ function dateStr(offset=0){
 function parseDateStr(s){ const[y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
 function formatDate(s){ return parseDateStr(s).toLocaleDateString("ru-RU",{day:"numeric",month:"long"}); }
 function formatWeekday(s){ return parseDateStr(s).toLocaleDateString("ru-RU",{weekday:"long"}); }
- 
 function humanDayName(offset){
-  if(offset===0) return "Сегодня";
-  if(offset===1) return "Завтра";
-  if(offset===-1) return "Вчера";
-  const w=formatWeekday(dateStr(offset));
-  return w.charAt(0).toUpperCase()+w.slice(1);
+  if(offset===0) return "Сегодня"; if(offset===1) return "Завтра"; if(offset===-1) return "Вчера";
+  const w=formatWeekday(dateStr(offset)); return w.charAt(0).toUpperCase()+w.slice(1);
 }
- 
-function offsetFromToday(s){
-  const t=parseDateStr(dateStr(0)), d=parseDateStr(s);
-  return Math.round((d-t)/86400000);
+function parsePortion(str){
+  if(!str) return {value:0,unit:"г"};
+  const m=str.match(/^([\d.,]+)\s*(\S+)$/);
+  return m?{value:parseFloat(m[1].replace(",",".")),unit:m[2]}:{value:0,unit:"г"};
 }
- 
-/* ==========================================================
+function calcNutrition(dish, gramsValue){
+  const base=parsePortion(dish.portion);
+  const f=base.value>0?gramsValue/base.value:0;
+  return {
+    kcal:Math.round(dish.kcal*f),
+    protein:Math.round(dish.protein*f*10)/10,
+    fat:Math.round(dish.fat*f*10)/10,
+    carbs:Math.round(dish.carbs*f*10)/10
+  };
+}
+
+function askConfirm(message, title="Подтверждение"){
+  const popup=document.getElementById("confirmPopup");
+  document.getElementById("confirmTitle").textContent=title;
+  document.getElementById("confirmMessage").textContent=message;
+  popup.style.display="flex";
+  return new Promise(resolve=>{
+    const yesBtn=document.getElementById("confirmYesBtn");
+    const noBtn=document.getElementById("confirmNoBtn");
+    const cleanup=answer=>{
+      popup.style.display="none";
+      yesBtn.onclick=null;
+      noBtn.onclick=null;
+      popup.onclick=null;
+      resolve(answer);
+    };
+    yesBtn.onclick=()=>cleanup(true);
+    noBtn.onclick=()=>cleanup(false);
+    popup.onclick=e=>{ if(e.target===popup) cleanup(false); };
+  });
+}
+
+/* ============================================================
+   ВСПОМОГАТЕЛЬНАЯ: строит сетку 2×2 для порции (без /цели)
+   Ячейки: Белки | Жиры
+            Углеводы | Ккал
+   ============================================================ */
+function buildPortionKpiGrid(kcal, protein, fat, carbs){
+  const grid = document.createElement("div");
+  grid.className = "portion-kpi-grid";
+  const cells = [
+    {val: protein+"г", lbl:"Белки"},
+    {val: fat+"г",     lbl:"Жиры"},
+    {val: carbs+"г",   lbl:"Углеводы"},
+    {val: kcal,        lbl:"Ккал"}
+  ];
+  cells.forEach(c=>{
+    const cell = document.createElement("div"); cell.className="portion-kpi-cell";
+    const v = document.createElement("div"); v.className="portion-kpi-val"; v.textContent=c.val;
+    const l = document.createElement("div"); l.className="portion-kpi-lbl"; l.textContent=c.lbl;
+    cell.appendChild(v); cell.appendChild(l); grid.appendChild(cell);
+  });
+  return grid;
+}
+
+/* ============================================================
+   ПРОФИЛИ / СЪЕДЕНО
+   ============================================================ */
+function getDayEaten(dateS, uid){
+  const userDay=(cloudEaten[dateS]||{})[uid]||{};
+  let kcal=0,protein=0,fat=0,carbs=0;
+  CATEGORIES.forEach(cat=>{
+    const e=userDay[cat.key]; if(!e) return;
+    kcal+=e.kcal||0; protein+=e.protein||0; fat+=e.fat||0; carbs+=e.carbs||0;
+  });
+  return {kcal:Math.round(kcal),protein:Math.round(protein*10)/10,fat:Math.round(fat*10)/10,carbs:Math.round(carbs*10)/10};
+}
+function getCatEaten(dateS, uid, catKey){ return (cloudEaten[dateS]?.[uid]?.[catKey])||null; }
+async function setEaten(dateS, uid, catKey, data){
+  if(!cloudEaten[dateS]) cloudEaten[dateS]={};
+  if(!cloudEaten[dateS][uid]) cloudEaten[dateS][uid]={};
+  if(data===null){ delete cloudEaten[dateS][uid][catKey]; }
+  else{ cloudEaten[dateS][uid][catKey]=data; }
+  await saveEaten();
+}
+
+/* ============================================================
    НАВИГАЦИЯ
-   ========================================================== */
+   ============================================================ */
 const VIEWS=["main","plan","shop","history","admin"];
- 
 function setView(viewId){
   VIEWS.forEach(v=>document.getElementById(v+"View").style.display=v===viewId?"":"none");
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===viewId));
@@ -354,40 +529,30 @@ function setView(viewId){
   if(viewId==="admin")   renderAdmin();
   if(viewId==="main")    render();
 }
- 
-/* ==========================================================
+
+/* ============================================================
    ГЛАВНЫЙ ЭКРАН
-   ========================================================== */
-const tabsEl=document.getElementById("tabs");
-const contentEl=document.getElementById("content");
+   ============================================================ */
+const tabsEl=document.getElementById("tabs"), contentEl=document.getElementById("content");
 let activeCat="breakfast", searchQuery="";
- 
+
 function renderDish(d){
   const card=document.createElement("div"); card.className="dish";
   const fav=isFavorite(d);
- 
   const head=document.createElement("div"); head.className="dish-head";
   const nameDiv=document.createElement("div"); nameDiv.className="dish-name"; nameDiv.textContent=d.name;
   if(fav){ const star=document.createElement("span"); star.className="star"; star.textContent="★"; nameDiv.appendChild(star); }
   const metaDiv=document.createElement("div"); metaDiv.className="dish-meta"; metaDiv.textContent=`${d.kcal} ккал · ${d.time}`;
   head.appendChild(nameDiv); head.appendChild(metaDiv);
   head.addEventListener("click",()=>card.classList.toggle("open"));
- 
   const body=document.createElement("div"); body.className="dish-body";
-  body.innerHTML=`<div class="stats">
-    <div class="stat"><div class="num">${d.kcal}</div><div class="lbl">ккал</div></div>
-    <div class="stat"><div class="num">${d.protein}г</div><div class="lbl">белки</div></div>
-    <div class="stat"><div class="num">${d.fat}г</div><div class="lbl">жиры</div></div>
-    <div class="stat"><div class="num">${d.carbs}г</div><div class="lbl">углеводы</div></div>
-  </div>`;
- 
+  body.innerHTML=`<div class="stats"><div class="stat"><div class="num">${d.kcal}</div><div class="lbl">ккал</div></div><div class="stat"><div class="num">${d.protein}г</div><div class="lbl">белки</div></div><div class="stat"><div class="num">${d.fat}г</div><div class="lbl">жиры</div></div><div class="stat"><div class="num">${d.carbs}г</div><div class="lbl">углеводы</div></div></div>`;
   [["Порция",d.portion],["Состав",d.ingredients],["Приготовление",d.recipe]].forEach(([lbl,txt])=>{
     const b=document.createElement("div"); b.className="block";
-    b.innerHTML=`<div class="block-label">${lbl}</div>`;
+    const l=document.createElement("div"); l.className="block-label"; l.textContent=lbl;
     const t=document.createElement("div"); t.className="block-text"; t.textContent=txt;
-    b.appendChild(t); body.appendChild(b);
+    b.appendChild(l); b.appendChild(t); body.appendChild(b);
   });
- 
   const btnRow=document.createElement("div"); btnRow.className="btn-row";
   const favBtn=document.createElement("button"); favBtn.className="fav-btn";
   favBtn.textContent=fav?"Убрать из избранного":"Добавить в избранное";
@@ -395,11 +560,10 @@ function renderDish(d){
   const planBtn=document.createElement("button"); planBtn.className="plan-dish-btn"; planBtn.textContent="Запланировать";
   planBtn.addEventListener("click",e=>{e.stopPropagation();openPlanPopup(d);});
   btnRow.appendChild(favBtn); btnRow.appendChild(planBtn); body.appendChild(btnRow);
- 
   card.appendChild(head); card.appendChild(body);
   return card;
 }
- 
+
 function render(){
   [...tabsEl.children].forEach(b=>b.classList.toggle("active",b.dataset.key===activeCat));
   const dishes=allDishes.filter(d=>d.category===activeCat);
@@ -411,12 +575,11 @@ function render(){
   const others=filtered.filter(d=>!isFavorite(d)).sort((a,b)=>a.name.localeCompare(b.name,"ru"));
   [...favs,...others].forEach(d=>contentEl.appendChild(renderDish(d)));
 }
- 
-/* ==========================================================
+
+/* ============================================================
    ПОПАП ПЛАНИРОВАНИЯ
-   ========================================================== */
+   ============================================================ */
 let popupDish=null, popupState={};
- 
 function openPlanPopup(dish){
   popupDish=dish; popupState={};
   for(let i=0;i<=6;i++){
@@ -430,18 +593,15 @@ function openPlanPopup(dish){
   for(let i=0;i<=6;i++){
     const section=document.createElement("div"); section.className="popup-day-section";
     const lbl=document.createElement("div"); lbl.className="popup-day-label";
-    lbl.textContent=humanDayName(i)+" · "+formatDate(dateStr(i));
-    section.appendChild(lbl);
+    lbl.textContent=humanDayName(i)+" · "+formatDate(dateStr(i)); section.appendChild(lbl);
     CATEGORIES.forEach(cat=>{
       const row=document.createElement("div"); row.className="popup-cat-row";
       const nm=document.createElement("div"); nm.className="popup-cat-name"; nm.textContent=cat.label;
       const btn=document.createElement("button");
-      const on=popupState[i][cat.key];
-      btn.className="popup-toggle "+(on?"on":"off"); btn.textContent=on?"✓ Добавлено":"Добавить";
+      const on=popupState[i][cat.key]; btn.className="popup-toggle "+(on?"on":"off"); btn.textContent=on?"✓ Добавлено":"Добавить";
       btn.addEventListener("click",()=>{
         popupState[i][cat.key]=!popupState[i][cat.key];
-        btn.className="popup-toggle "+(popupState[i][cat.key]?"on":"off");
-        btn.textContent=popupState[i][cat.key]?"✓ Добавлено":"Добавить";
+        btn.className="popup-toggle "+(popupState[i][cat.key]?"on":"off"); btn.textContent=popupState[i][cat.key]?"✓ Добавлено":"Добавить";
       });
       row.appendChild(nm); row.appendChild(btn); section.appendChild(row);
     });
@@ -449,195 +609,278 @@ function openPlanPopup(dish){
   }
   document.getElementById("planPopup").style.display="flex";
 }
- 
 async function savePopup(){
   document.getElementById("popupStatus").textContent="Сохранение…";
-  const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
+  const prev=JSON.parse(JSON.stringify(cloudPlan.plan));
   for(let i=0;i<=6;i++){
     const ds=dateStr(i);
     if(!cloudPlan.plan[ds]) cloudPlan.plan[ds]={};
     CATEGORIES.forEach(cat=>{
-      const oldDishId=getDishId(cloudPlan.plan[ds][cat.key]);
-      if(popupState[i][cat.key]){
-        if(oldDishId!==popupDish.id) cloudPlan.plan[ds][cat.key]={dishId:popupDish.id};
-      } else {
-        if(oldDishId===popupDish.id) delete cloudPlan.plan[ds][cat.key];
-      }
+      const old=getDishId(cloudPlan.plan[ds][cat.key]);
+      if(popupState[i][cat.key]){ if(old!==popupDish.id) cloudPlan.plan[ds][cat.key]={dishId:popupDish.id}; }
+      else { if(old===popupDish.id) delete cloudPlan.plan[ds][cat.key]; }
     });
     if(!Object.keys(cloudPlan.plan[ds]).length) delete cloudPlan.plan[ds];
   }
   try{
-    await savePlan();
-    document.getElementById("popupStatus").textContent="Сохранено ✓";
+    await savePlan(); document.getElementById("popupStatus").textContent="Сохранено ✓";
     setTimeout(()=>{ document.getElementById("planPopup").style.display="none"; },700);
-  }catch(e){
-    cloudPlan.plan=prevPlan;
-    document.getElementById("popupStatus").textContent="Ошибка сохранения";
-  }
+  }catch(e){ cloudPlan.plan=prev; document.getElementById("popupStatus").textContent="Ошибка сохранения"; }
 }
- 
-/* ==========================================================
+
+/* ============================================================
+   ПОПАП "СЪЕДЕНО" — с новым превью 2×2
+   ============================================================ */
+let eatenCtx=null;
+
+function openEatenPopup(dateS, catKey, dish, profile){
+  eatenCtx={dateS,catKey,dish,uid:profile.uid};
+  const base=parsePortion(dish.portion);
+  document.getElementById("eatenDishName").textContent=dish.name;
+  document.getElementById("eatenDishBase").textContent=`Базовая порция: ${dish.portion} · ${dish.kcal} ккал`;
+  document.getElementById("eatenProfileLabel").textContent=profile.name;
+  document.getElementById("eatenStatus").textContent="";
+  const existing=getCatEaten(dateS,profile.uid,catKey);
+  const pp=existing?.portion?parsePortion(existing.portion):{value:base.value,unit:base.unit};
+  document.getElementById("eatenPortionInput").value=pp.value||"";
+  updateEatenPreview(dish);
+  document.getElementById("eatenPopup").style.display="flex";
+}
+
+function updateEatenPreview(dish){
+  const v=parseFloat(document.getElementById("eatenPortionInput").value)||0;
+  const n=calcNutrition(dish, v);
+  const container=document.getElementById("eatenPreview");
+  container.innerHTML="";
+  container.appendChild(buildPortionKpiGrid(n.kcal, n.protein, n.fat, n.carbs));
+}
+
+async function saveEatenEntry(){
+  const {dateS,catKey,dish,uid}=eatenCtx;
+  const v=parseFloat(document.getElementById("eatenPortionInput").value)||0;
+  if(v<=0){ alert("Введите количество"); return; }
+  const base=parsePortion(dish.portion);
+  const n=calcNutrition(dish,v);
+  const data={kcal:n.kcal,protein:n.protein,fat:n.fat,carbs:n.carbs,portion:`${v} г`,dishId:dish.id};
+  document.getElementById("eatenStatus").textContent="Сохранение…";
+  try{
+    await setEaten(dateS,uid,catKey,data);
+    document.getElementById("eatenStatus").textContent="Сохранено ✓";
+    setTimeout(()=>{ document.getElementById("eatenPopup").style.display="none"; renderPlanDay(); },700);
+  }catch(e){ document.getElementById("eatenStatus").textContent="Ошибка сохранения"; }
+}
+
+async function clearEatenEntry(){
+  const {dateS,catKey,uid}=eatenCtx;
+  document.getElementById("eatenStatus").textContent="Удаление…";
+  try{
+    await setEaten(dateS,uid,catKey,null);
+    document.getElementById("eatenStatus").textContent="Очищено";
+    setTimeout(()=>{ document.getElementById("eatenPopup").style.display="none"; renderPlanDay(); },500);
+  }catch(e){ document.getElementById("eatenStatus").textContent="Ошибка"; }
+}
+
+/* ============================================================
    ПЛАН
-   ========================================================== */
+   ============================================================ */
 let planOffset=0;
- 
 function renderPlanView(){ updatePlanNav(); renderPlanDay(); }
- 
 function updatePlanNav(){
   document.getElementById("planDayName").textContent=humanDayName(planOffset);
   document.getElementById("planDayDate").textContent=formatDate(dateStr(planOffset));
-  document.getElementById("dayPrev").disabled=planOffset<=-30;
+  document.getElementById("dayPrev").disabled=planOffset<=0;
   document.getElementById("dayNext").disabled=planOffset>=14;
-  document.getElementById("planDayBadge").innerHTML=planOffset<0
-    ?'<span class="day-past-badge">прошедший день · только просмотр</span>':"";
+  document.getElementById("planDayBadge").innerHTML="";
 }
- 
-function parsePortion(str){
-  if(!str) return {value:0,unit:"г"};
-  const m=str.match(/^([\d.,]+)\s*(\S+)$/);
-  return m?{value:parseFloat(m[1].replace(",",".")),unit:m[2]}:{value:0,unit:"г"};
-}
- 
-function calculateCustomKcal(dish,customPortion){
-  const base=parsePortion(dish.portion), custom=parsePortion(customPortion||dish.portion);
-  const factor=base.value>0?custom.value/base.value:1;
-  return {
-    kcal:Math.round(dish.kcal*factor),
-    protein:Math.round(dish.protein*factor*10)/10,
-    fat:Math.round(dish.fat*factor*10)/10,
-    carbs:Math.round(dish.carbs*factor*10)/10
-  };
-}
- 
+
 function renderPlanDay(){
-  const ds=dateStr(planOffset), dayPlan=cloudPlan.plan[ds]||{}, isPast=planOffset<0;
-  const c2=document.getElementById("planContent"), ef=document.getElementById("planEditForm"), sb=document.getElementById("planSaveBtn");
-  c2.innerHTML=""; ef.style.display="none"; sb.style.display="none";
+  const ds=dateStr(planOffset), dayPlan=cloudPlan.plan[ds]||{};
+  const c2=document.getElementById("planContent"), ef=document.getElementById("planEditForm"), actions=document.getElementById("planEditActions");
+  c2.innerHTML=""; ef.style.display="none"; actions.style.display="none";
   document.getElementById("planStatus").textContent="";
- 
+
   const entries=CATEGORIES.filter(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; });
   if(!entries.length){
-    c2.innerHTML=`<div class="empty">${isPast?"В этот день ничего не было запланировано.":"На этот день ничего не запланировано."}</div>`;
-    if(!isPast){ const btn=document.createElement("button"); btn.className="edit-btn"; btn.textContent="+ Добавить план"; btn.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(btn); }
+    c2.innerHTML=`<div class="empty">На этот день ничего не запланировано.</div>`;
+    const btn=document.createElement("button"); btn.className="edit-btn"; btn.textContent="+ Добавить план";
+    btn.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(btn);
     return;
   }
- 
-  let tk=0,tp=0,tf=0,tc=0;
+
   CATEGORIES.forEach(cat=>{
     const val=dayPlan[cat.key]; if(!val) return;
     const dishId=getDishId(val); if(!dishId||dishId==="skip") return;
     const dish=getDishById(dishId); if(!dish) return;
     const custom=typeof val==="object"?val:{};
-    const portion=custom.customPortion||dish.portion;
-    const note=custom.customNote?` · ${custom.customNote}`:"";
-    const calc=calculateCustomKcal(dish,portion);
- 
+    const portionStr=custom.customPortion||dish.portion;
+    const portionGrams=parsePortion(portionStr).value;
+    const n=calcNutrition(dish, portionGrams);
+
     const card=document.createElement("div"); card.className="today-card";
+
     const catLbl=document.createElement("div"); catLbl.className="cat-label"; catLbl.textContent=cat.label;
     const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
-    const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${calc.kcal} ккал · ${portion}${note}`;
+    const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
     card.appendChild(catLbl); card.appendChild(dName); card.appendChild(dMeta);
- 
-    if(!isPast){
-      const editBtn=document.createElement("button"); editBtn.className="card-edit-btn"; editBtn.textContent="✎";
-      editBtn.addEventListener("click",e=>{e.stopPropagation();card.classList.toggle("expanded");});
-      card.appendChild(editBtn);
- 
-      const form=document.createElement("div"); form.className="local-edit-form";
-      const basePortion=parsePortion(dish.portion);
-      const curPortion=parsePortion(portion);
-      form.innerHTML=`
-        <div class="mb-12">
-          <div class="add-dish-form" style="border:none;margin:0;padding:0;">
-            <label>Порция</label>
-            <div class="flex-row mt-4">
-              <input type="number" class="loc-portion-value" value="${curPortion.value}" step="any" style="flex:1;">
-              <select class="loc-portion-unit" style="flex:1;">${["г","мл","шт","ст.л.","ч.л."].map(u=>`<option value="${u}" ${u===curPortion.unit?"selected":""}>${u}</option>`).join("")}</select>
-            </div>
-            <div class="portion-hint">Базовая порция: ${dish.portion}</div>
-          </div>
-        </div>
-        <div class="loc-kcal-preview preview-block mb-14"></div>
-        <div class="add-dish-form" style="border:none;margin:0;padding:0;">
-          <label>Заметка</label>
-          <input type="text" class="loc-note" placeholder="Например: без масла, двойная порция" style="margin-top:4px;">
-        </div>
-        <div class="flex-row mt-12">
-          <button class="loc-save-btn save-btn" style="flex:1;">Сохранить</button>
-          <button class="loc-cancel-btn save-btn" style="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;">Отмена</button>
-        </div>
-        <div class="loc-status sync-status"></div>
-      `;
-      form.querySelector(".loc-note").value=custom.customNote||"";
- 
-      const portionInput=form.querySelector(".loc-portion-value");
-      const unitSelect=form.querySelector(".loc-portion-unit");
-      const previewEl=form.querySelector(".loc-kcal-preview");
- 
-      const updatePreview=()=>{
-        const v=parseFloat(portionInput.value)||0, u=unitSelect.value;
-        const factor=basePortion.value>0?v/basePortion.value:0;
-        previewEl.innerHTML=`<div class="preview-stats">
-          <div><span>${Math.round(dish.kcal*factor)}</span> ккал</div>
-          <div><span>${Math.round(dish.protein*factor*10)/10}г</span> белки</div>
-          <div><span>${Math.round(dish.fat*factor*10)/10}г</span> жиры</div>
-          <div><span>${Math.round(dish.carbs*factor*10)/10}г</span> углеводы</div>
-        </div><div class="hint-text">Рассчитано для ${v} ${u}</div>`;
-      };
-      portionInput.addEventListener("input",updatePreview);
-      unitSelect.addEventListener("change",updatePreview);
-      updatePreview();
- 
-      form.querySelector(".loc-cancel-btn").addEventListener("click",e=>{
-        e.stopPropagation(); card.classList.remove("expanded");
-        portionInput.value=curPortion.value; unitSelect.value=curPortion.unit;
-        form.querySelector(".loc-note").value=custom.customNote||"";
-        updatePreview();
-      });
- 
-      form.querySelector(".loc-save-btn").addEventListener("click",async e=>{
-        e.stopPropagation();
-        const statusEl=form.querySelector(".loc-status"); statusEl.textContent="Сохранение…";
-        const v=portionInput.value.trim(), u=unitSelect.value, n=form.querySelector(".loc-note").value.trim();
-        const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
-        cloudPlan.plan[ds]=cloudPlan.plan[ds]||{};
-        cloudPlan.plan[ds][cat.key]={dishId:dishId, customPortion:v?`${v} ${u}`:null, customNote:n||undefined};
-        try{
-          await savePlan(); statusEl.textContent="Сохранено ✓";
-          setTimeout(()=>{ card.classList.remove("expanded"); renderPlanDay(); },600);
-        }catch(err){ cloudPlan.plan=prevPlan; statusEl.textContent="Ошибка сохранения"; }
-      });
- 
-      card.appendChild(form);
+
+    // Кнопки съедено
+    const btnArea=document.createElement("div"); btnArea.style.cssText="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;";
+    PROFILES.forEach(profile=>{
+      const eaten=getCatEaten(ds,profile.uid,cat.key);
+      const btn=document.createElement("button");
+      btn.className="eaten-btn "+(eaten?"eaten":"not-eaten");
+      btn.textContent=eaten?`${profile.name}: ${eaten.kcal} ккал (${eaten.portion})`:`${profile.name}: отметить`;
+      btn.addEventListener("click",()=>openEatenPopup(ds,cat.key,dish,profile));
+      btnArea.appendChild(btn);
+    });
+    card.appendChild(btnArea);
+
+    // Кнопка ✎ редактирования порции
+    const editBtn=document.createElement("button"); editBtn.className="card-edit-btn"; editBtn.textContent="✎";
+    editBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.toggle("expanded"); });
+    card.appendChild(editBtn);
+
+    // Форма редактирования порции — только граммы + превью 2×2
+    const form=document.createElement("div"); form.className="local-edit-form";
+    const baseParsed=parsePortion(dish.portion);
+    const curGrams=portionGrams||baseParsed.value;
+
+    const formInner=document.createElement("div"); formInner.style.fontFamily="-apple-system,sans-serif";
+
+    const portionLbl=document.createElement("div");
+    portionLbl.style.cssText="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px;";
+    portionLbl.textContent="Порция, г";
+    formInner.appendChild(portionLbl);
+
+    const portionInput=document.createElement("input");
+    portionInput.type="number"; portionInput.value=curGrams; portionInput.step="any";
+    portionInput.style.cssText="width:100%;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;margin-bottom:6px;";
+    formInner.appendChild(portionInput);
+
+    const baseHint=document.createElement("div"); baseHint.className="portion-hint";
+    baseHint.textContent=`Базовая: ${dish.portion}`;
+    formInner.appendChild(baseHint);
+
+    // Превью КБЖУ 2×2
+    const previewWrap=document.createElement("div"); previewWrap.style.marginTop="10px";
+    formInner.appendChild(previewWrap);
+
+    const originalPortionValue=Number(curGrams)||0;
+    function updateLocalPreview(){
+      const g=parseFloat(portionInput.value)||0;
+      const nn=calcNutrition(dish,g);
+      previewWrap.innerHTML="";
+      previewWrap.appendChild(buildPortionKpiGrid(nn.kcal,nn.protein,nn.fat,nn.carbs));
     }
+    portionInput.addEventListener("input",updateLocalPreview);
+    updateLocalPreview();
+
+    // Кнопки сохранить / отмена
+    const btnRow2=document.createElement("div"); btnRow2.className="flex-row mt-8";
+    const saveBtn2=document.createElement("button"); saveBtn2.className="save-btn"; saveBtn2.style.flex="1"; saveBtn2.textContent="Сохранить";
+    saveBtn2.disabled=true;
+    const cancelBtn=document.createElement("button"); cancelBtn.className="save-btn";
+    cancelBtn.style.cssText="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;";
+    cancelBtn.textContent="Отмена";
+    const locStatus=document.createElement("div"); locStatus.className="sync-status";
+    const updateLocalSaveState=()=>{
+      const currentValue=Number(portionInput.value)||0;
+      saveBtn2.disabled=currentValue===originalPortionValue;
+    };
+    portionInput.addEventListener("input",updateLocalSaveState);
+
+    cancelBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.remove("expanded"); });
+    saveBtn2.addEventListener("click",async e=>{
+      e.stopPropagation();
+      locStatus.textContent="Сохранение…";
+      const gVal=portionInput.value.trim();
+      const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
+      cloudPlan.plan[ds]=cloudPlan.plan[ds]||{};
+      cloudPlan.plan[ds][cat.key]={dishId:dishId, customPortion:gVal?`${gVal} г`:null};
+      try{
+        await savePlan(); locStatus.textContent="Сохранено ✓";
+        setTimeout(()=>{ card.classList.remove("expanded"); renderPlanDay(); },600);
+      }catch(err){ cloudPlan.plan=prevPlan; locStatus.textContent="Ошибка"; }
+    });
+
+    btnRow2.appendChild(saveBtn2); btnRow2.appendChild(cancelBtn);
+    formInner.appendChild(btnRow2); formInner.appendChild(locStatus);
+    form.appendChild(formInner);
+    card.appendChild(form);
     c2.appendChild(card);
-    tk+=calc.kcal; tp+=calc.protein; tf+=calc.fat; tc+=calc.carbs;
   });
- 
-  if(tk>0){
-    const st=document.createElement("div"); st.className="today-stats";
-    st.innerHTML=`<div class="stats-title">Итого за день</div><div class="stats">
-      <div class="stat"><div class="num">${tk}</div><div class="lbl">ккал</div></div>
-      <div class="stat"><div class="num">${tp}г</div><div class="lbl">белки</div></div>
-      <div class="stat"><div class="num">${tf}г</div><div class="lbl">жиры</div></div>
-      <div class="stat"><div class="num">${tc}г</div><div class="lbl">углеводы</div></div>
-    </div>`; c2.appendChild(st);
-  }
-  if(!isPast){
-    const eb=document.createElement("button"); eb.className="edit-btn"; eb.textContent="✎ Изменить";
-    eb.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(eb);
-  }
+
+  renderDayTotals(ds, c2);
+
+  const eb=document.createElement("button"); eb.className="edit-btn"; eb.textContent="✎ Изменить план";
+  eb.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(eb);
 }
- 
+
+/* ============================================================
+   ИТОГО ЗА ДЕНЬ
+   ============================================================ */
+function renderDayTotals(ds, container){
+  const goals=cloudEaten.goals||{};
+  const block=document.createElement("div"); block.className="day-totals";
+  const title=document.createElement("div"); title.className="day-totals-title"; title.textContent="Итого за день";
+  block.appendChild(title);
+  const grid=document.createElement("div"); grid.className="day-totals-profiles";
+
+  PROFILES.forEach(p=>{
+    const totals=getDayEaten(ds,p.uid);
+    const goal=goals[p.uid]||{kcal:2000,protein:120,fat:70,carbs:200};
+    const pct=Math.min(100,Math.round(totals.kcal/goal.kcal*100));
+    const kcalOver=totals.kcal>goal.kcal;
+
+    const col=document.createElement("div"); col.className="profile-totals";
+    const nameEl=document.createElement("div"); nameEl.className="profile-totals-name"; nameEl.textContent=p.name;
+    col.appendChild(nameEl);
+
+    const kpiGrid=document.createElement("div"); kpiGrid.className="kpi-grid";
+    const cells=[
+      {val:`${totals.kcal}/${goal.kcal}`,           lbl:"Ккал", over:kcalOver},
+      {val:`${totals.protein}/${goal.protein}г`,   lbl:"Белки", over:totals.protein>goal.protein},
+      {val:`${totals.fat}/${goal.fat}г`,           lbl:"Жиры", over:totals.fat>goal.fat},
+      {val:`${totals.carbs}/${goal.carbs}г`,       lbl:"Углеводы", over:totals.carbs>goal.carbs}
+    ];
+    cells.forEach(c=>{
+      const cell=document.createElement("div"); cell.className="kpi-cell";
+      const valEl=document.createElement("div");
+      valEl.className="kpi-cell-val"+(c.over?" over":""); valEl.textContent=c.val;
+      const lblEl=document.createElement("div"); lblEl.className="kpi-cell-lbl"; lblEl.textContent=c.lbl;
+      cell.appendChild(valEl); cell.appendChild(lblEl);
+      kpiGrid.appendChild(cell);
+    });
+    col.appendChild(kpiGrid);
+
+    const bar=document.createElement("div"); bar.className="profile-goal-bar";
+    const fill=document.createElement("div"); fill.className="profile-goal-bar-fill"+(kcalOver?" over":""); fill.style.width=pct+"%";
+    bar.appendChild(fill); col.appendChild(bar);
+    const barText=document.createElement("div"); barText.className="profile-goal-text";
+    barText.textContent=kcalOver?"превышено на "+(totals.kcal-goal.kcal)+" ккал":pct+"% нормы";
+    col.appendChild(barText);
+
+    grid.appendChild(col);
+  });
+
+  block.appendChild(grid);
+  container.appendChild(block);
+}
+
 function showPlanEditForm(ds){
   const dayPlan=cloudPlan.plan[ds]||{};
   document.getElementById("planContent").innerHTML="";
-  const ef=document.getElementById("planEditForm"), sb=document.getElementById("planSaveBtn");
-  ef.style.display="block"; sb.style.display="block"; ef.innerHTML="";
+  const ef=document.getElementById("planEditForm"), actions=document.getElementById("planEditActions");
+  const saveBtn=document.getElementById("planSaveBtn");
+  ef.style.display="block"; actions.style.display="flex"; ef.innerHTML="";
+  saveBtn.disabled=true;
+  document.getElementById("planStatus").textContent="";
+  const originalPlanValues={};
   CATEGORIES.forEach(cat=>{
     const row=document.createElement("div"); row.className="plan-row";
     const lbl=document.createElement("label"); lbl.textContent=cat.label;
     const sel=document.createElement("select"); sel.dataset.cat=cat.key;
+    originalPlanValues[cat.key]=getDishId(dayPlan[cat.key])||"";
     const empty=document.createElement("option"); empty.value=""; empty.textContent="— не выбрано —"; sel.appendChild(empty);
     allDishes.filter(d=>d.category===cat.key).sort((a,b)=>a.name.localeCompare(b.name,"ru")).forEach(d=>{
       const o=document.createElement("option"); o.value=d.id; o.textContent=d.name;
@@ -645,254 +888,277 @@ function showPlanEditForm(ds){
     });
     row.appendChild(lbl); row.appendChild(sel); ef.appendChild(row);
   });
-  document.getElementById("planSaveBtn").onclick=async()=>{
+  const updatePlanSaveState=()=>{
+    saveBtn.disabled=![...ef.querySelectorAll("select")].some(s=>s.value!==originalPlanValues[s.dataset.cat]);
+  };
+  ef.querySelectorAll("select").forEach(s=>s.addEventListener("change",updatePlanSaveState));
+  saveBtn.onclick=async()=>{
     document.getElementById("planStatus").textContent="Сохранение…";
     const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
     const newDay={};
     ef.querySelectorAll("select").forEach(s=>{
       if(!s.value) return;
-      const existing=cloudPlan.plan[ds]?.[s.dataset.cat];
-      newDay[s.dataset.cat]=(getDishId(existing)===s.value) ? existing : {dishId:s.value};
+      const ex=cloudPlan.plan[ds]?.[s.dataset.cat];
+      newDay[s.dataset.cat]=(getDishId(ex)===s.value)?ex:{dishId:s.value};
     });
     if(!Object.keys(newDay).length) delete cloudPlan.plan[ds]; else cloudPlan.plan[ds]=newDay;
     try{
-      await savePlan();
-      document.getElementById("planStatus").textContent="Сохранено ✓";
-      ef.style.display="none"; sb.style.display="none";
+      await savePlan(); document.getElementById("planStatus").textContent="Сохранено ✓";
+      ef.style.display="none"; actions.style.display="none";
       setTimeout(()=>renderPlanDay(),800);
     }catch(e){ cloudPlan.plan=prevPlan; document.getElementById("planStatus").textContent="Ошибка сохранения"; }
   };
+  document.getElementById("planCancelBtn").onclick=()=>{
+    document.getElementById("planStatus").textContent="";
+    ef.style.display="none";
+    actions.style.display="none";
+    renderPlanDay();
+  };
 }
- 
-/* ==========================================================
+
+/* ============================================================
    ПОКУПКИ
-   ========================================================== */
-let shopDays=1;
-// boughtKeys: ингредиенты отмеченные как "куплено сегодня" — {key: qty_bought}
-// Храним в localStorage с датой, чтобы сбрасывалось на следующий день
-let boughtToday={};
- 
-function saveBought(){
-  localStorage.setItem("shopBought",JSON.stringify({date:dateStr(0),data:boughtToday}));
-}
+   ============================================================ */
+let shopDays=1, boughtToday={};
+function saveBought(){ localStorage.setItem("shopBought",JSON.stringify({date:dateStr(0),data:boughtToday})); }
 function loadBought(){
   try{
-    const raw=JSON.parse(localStorage.getItem("shopBought")||"null");
-    if(raw&&raw.date===dateStr(0)) boughtToday=raw.data||{};
-    else boughtToday={};
+    const r=JSON.parse(localStorage.getItem("shopBought")||"null");
+    if(r&&r.date===dateStr(0)) boughtToday=r.data||{}; else boughtToday={};
   }catch(e){ boughtToday={}; }
 }
- 
 function parseIngredient(raw){
   raw=raw.trim();
   const m=raw.match(/^(.*?)\s*\(?\s*([\d.,]+)\s*(г|кг|мл|л|шт|ст\.л\.|ч\.л\.|стакан[а-я]*|щепотк[а-я]*)\s*\)?$/i);
   if(m) return {name:m[1].trim().toLowerCase(),qty:parseFloat(m[2].replace(",",".")),unit:m[3].toLowerCase()};
   return {name:raw.toLowerCase(),qty:null,unit:null};
 }
- 
-// Собирает Map ингредиентов за days дней начиная с offset
-function buildIngredientMap(days,startOffset=0){
+function buildIngredientMap(days){
   const map=new Map();
-  for(let i=startOffset;i<startOffset+days;i++){
+  for(let i=0;i<days;i++){
     const ds=dateStr(i), dayPlan=cloudPlan.plan[ds]||{};
     CATEGORIES.forEach(cat=>{
-      const dishId=getDishId(dayPlan[cat.key]);
-      if(!dishId||dishId==="skip") return;
+      const dishId=getDishId(dayPlan[cat.key]); if(!dishId||dishId==="skip") return;
       const dish=getDishById(dishId); if(!dish||!dish.ingredients) return;
       dish.ingredients.split(",").forEach(raw=>{
         const p=parseIngredient(raw), key=p.name;
         if(!map.has(key)) map.set(key,{name:p.name,qty:0,unit:p.unit});
-        const entry=map.get(key);
-        if(p.qty!==null) entry.qty+=p.qty;
+        const e=map.get(key); if(p.qty!==null) e.qty+=p.qty;
       });
     });
   }
   return map;
 }
- 
 function renderShopView(){
   const rangeEl=document.getElementById("shopRange"); rangeEl.innerHTML="";
   [["Сегодня",1],["3 дня",3],["Неделя",7]].forEach(([label,days])=>{
-    const btn=document.createElement("button");
-    btn.className="shop-range-btn"+(shopDays===days?" active":"");
-    btn.textContent=label;
+    const btn=document.createElement("button"); btn.className="shop-range-btn"+(shopDays===days?" active":""); btn.textContent=label;
     btn.addEventListener("click",()=>{ if(shopDays===days) return; shopDays=days; renderShopView(); });
     rangeEl.appendChild(btn);
   });
   renderShopList();
 }
- 
 function renderShopList(){
   const el=document.getElementById("shopContent"); el.innerHTML="";
- 
-  // Весь период
   const mapTotal=buildIngredientMap(shopDays);
-  // Только сегодня
-  const mapTodayOnly=buildIngredientMap(1);
-  // Остаток (период без сегодня, если период > 1 дня)
-  const mapRest=shopDays>1 ? buildIngredientMap(shopDays-1,1) : new Map();
- 
   if(!mapTotal.size){
     el.innerHTML='<div class="empty">Нет запланированных блюд на выбранный период.<br>Сначала составьте план в разделе «План».</div>';
     return;
   }
- 
   [...mapTotal.values()].sort((a,b)=>a.name.localeCompare(b.name,"ru")).forEach(item=>{
-    const key=item.name;
-    const unit=item.unit||"";
-    const totalQty=item.qty; // всего за период
-    const todayQty=mapTodayOnly.has(key)?mapTodayOnly.get(key).qty:0; // сколько нужно сегодня
-    const restQty=mapRest.has(key)?mapRest.get(key).qty:0; // сколько нужно в остальные дни
-    const boughtQty=boughtToday[key]||0; // сколько отметили купленным
- 
-    // Остаток к покупке: вычитаем купленное из сегодняшней нормы,
-    // если купили больше сегодняшней нормы — излишек идёт в счёт остальных дней
-    const remaining=Math.max(0, totalQty - boughtQty);
-    const fullyBought=boughtQty>=totalQty || (totalQty===0 && boughtQty>0);
- 
-    const displayName=item.name.charAt(0).toUpperCase()+item.name.slice(1);
- 
-    // Текст количества: показываем остаток если есть, иначе ничего
+    const key=item.name, unit=item.unit||"", totalQty=item.qty;
+    const boughtQty=boughtToday[key]||0;
+    const fullyBought=totalQty>0?boughtQty>=totalQty:(boughtQty>0);
     let qtyText="";
     if(totalQty>0){
-      if(fullyBought) qtyText=""; // всё куплено — текст не нужен, строка зачёркнута
-      else if(boughtQty>0) qtyText=` — ещё ${remaining}${unit}`; // куплено частично
-      else qtyText=` — ${totalQty}${unit}`; // ничего не куплено
-    }
- 
-    const row=document.createElement("div");
-    row.className="shop-item"+(fullyBought?" checked":"");
- 
-    const checkDiv=document.createElement("div");
-    checkDiv.className="shop-check";
-    checkDiv.textContent=fullyBought?"✓":"";
- 
-    const infoDiv=document.createElement("div"); infoDiv.style.flex="1";
-    const textDiv=document.createElement("div"); textDiv.className="shop-text";
-    textDiv.textContent=displayName+qtyText;
-    infoDiv.appendChild(textDiv);
-    row.appendChild(checkDiv); row.appendChild(infoDiv);
- 
-    row.addEventListener("click",()=>{
-      if(fullyBought){
-        // снимаем галочку — обнуляем купленное
-        delete boughtToday[key];
-      } else {
-        // отмечаем купленным на сегодня (покрываем сегодняшнюю норму)
-        // если хотим зачеркнуть полностью — записываем весь total
-        boughtToday[key]=totalQty>0?totalQty:1;
+      if(!fullyBought){
+        if(boughtQty>0) qtyText=` — ещё ${Math.max(0,totalQty-boughtQty)}${unit}`;
+        else qtyText=` — ${totalQty}${unit}`;
       }
-      saveBought();
-      renderShopList();
+    }
+    const displayName=item.name.charAt(0).toUpperCase()+item.name.slice(1);
+    const row=document.createElement("div"); row.className="shop-item"+(fullyBought?" checked":"");
+    const checkDiv=document.createElement("div"); checkDiv.className="shop-check"; checkDiv.textContent=fullyBought?"✓":"";
+    const infoDiv=document.createElement("div"); infoDiv.style.flex="1";
+    const textDiv=document.createElement("div"); textDiv.className="shop-text"; textDiv.textContent=displayName+qtyText;
+    infoDiv.appendChild(textDiv); row.appendChild(checkDiv); row.appendChild(infoDiv);
+    row.addEventListener("click",()=>{
+      if(fullyBought) delete boughtToday[key]; else boughtToday[key]=totalQty>0?totalQty:1;
+      saveBought(); renderShopList();
     });
- 
     el.appendChild(row);
   });
 }
- 
-/* ==========================================================
-   ИСТОРИЯ — листалка с поиском первого дня с данными
-   ========================================================== */
+
+/* ============================================================
+   ИСТОРИЯ
+   ============================================================ */
 let histOffset=-1;
- 
 function findNearestHistoryDay(){
-  // ищем ближайший прошлый день с планом, начиная со вчера
   for(let i=-1;i>=-365;i--){
-    const ds=dateStr(i), dayPlan=cloudPlan.plan[ds]||{};
-    const hasData=CATEGORIES.some(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; });
-    if(hasData) return i;
+    const ds=dateStr(i),dayPlan=cloudPlan.plan[ds]||{};
+    if(CATEGORIES.some(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; })) return i;
   }
-  return -1; // вернём вчера если ничего нет
+  return -1;
 }
- 
-function renderHistoryView(){
-  histOffset=findNearestHistoryDay();
-  updateHistNav(); renderHistDay();
-}
- 
+function renderHistoryView(){ histOffset=findNearestHistoryDay(); updateHistNav(); renderHistDay(); }
 function updateHistNav(){
   document.getElementById("histDayName").textContent=humanDayName(histOffset);
   document.getElementById("histDayDate").textContent=formatDate(dateStr(histOffset));
   document.getElementById("histPrev").disabled=histOffset<=-365;
   document.getElementById("histNext").disabled=histOffset>=-1;
 }
- 
 function renderHistDay(){
   const ds=dateStr(histOffset), dayPlan=cloudPlan.plan[ds]||{};
   const el=document.getElementById("historyContent"); el.innerHTML="";
   const entries=CATEGORIES.filter(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; });
   if(!entries.length){ el.innerHTML='<div class="empty">В этот день ничего не было запланировано.</div>'; return; }
- 
-  let tk=0,tp=0,tf=0,tc=0;
   entries.forEach(cat=>{
     const val=dayPlan[cat.key], dishId=getDishId(val);
     const dish=getDishById(dishId); if(!dish) return;
     const custom=typeof val==="object"?val:{};
-    const portion=custom.customPortion||dish.portion;
-    const note=custom.customNote?` · ${custom.customNote}`:"";
-    const calc=calculateCustomKcal(dish,portion);
+    const portionStr=custom.customPortion||dish.portion;
+    const portionGrams=parsePortion(portionStr).value;
+    const n=calcNutrition(dish,portionGrams);
     const card=document.createElement("div"); card.className="today-card";
-    card.innerHTML=`<div class="cat-label"></div><div class="dish-name-plain"></div><div class="dish-meta"></div>`;
-    card.querySelector(".cat-label").textContent=cat.label;
-    card.querySelector(".dish-name-plain").textContent=dish.name;
-    card.querySelector(".dish-meta").textContent=`${calc.kcal} ккал · ${portion}${note}`;
+    const catLbl=document.createElement("div"); catLbl.className="cat-label"; catLbl.textContent=cat.label;
+    const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
+    const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
+    card.appendChild(catLbl); card.appendChild(dName); card.appendChild(dMeta);
+    const eatenRow=document.createElement("div"); eatenRow.style.cssText="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;";
+    PROFILES.forEach(p=>{
+      const e=getCatEaten(ds,p.uid,cat.key);
+      const span=document.createElement("span");
+      span.style.cssText="font-family:-apple-system,sans-serif;font-size:11px;color:var(--muted);";
+      span.textContent=e?`${p.name}: ${e.kcal} ккал (${e.portion})`:`${p.name}: —`;
+      eatenRow.appendChild(span);
+    });
+    card.appendChild(eatenRow);
     el.appendChild(card);
-    tk+=calc.kcal; tp+=calc.protein; tf+=calc.fat; tc+=calc.carbs;
   });
- 
-  if(tk>0){
-    const st=document.createElement("div"); st.className="today-stats";
-    st.innerHTML=`<div class="stats-title">Итого за день</div><div class="stats">
-      <div class="stat"><div class="num">${tk}</div><div class="lbl">ккал</div></div>
-      <div class="stat"><div class="num">${tp}г</div><div class="lbl">белки</div></div>
-      <div class="stat"><div class="num">${tf}г</div><div class="lbl">жиры</div></div>
-      <div class="stat"><div class="num">${tc}г</div><div class="lbl">углеводы</div></div>
-    </div>`; el.appendChild(st);
-  }
+  renderDayTotals(ds,el);
 }
- 
-/* ==========================================================
-   АДМИНКА
-   ========================================================== */
+
+/* ============================================================
+   АДМИНКА — вкладки Цели / Блюда
+   ============================================================ */
 let adminCat="breakfast";
- 
+let activeAdminTab="goals"; // "goals" | "dishes"
+
 function renderAdmin(){
+  // Переключатель вкладок
+  document.querySelectorAll(".admin-tab-btn").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.adminTab===activeAdminTab);
+  });
+  document.getElementById("adminGoalsTab").style.display  = activeAdminTab==="goals"  ? "" : "none";
+  document.getElementById("adminDishesTab").style.display = activeAdminTab==="dishes" ? "" : "none";
+
+  if(activeAdminTab==="goals") renderGoalsTab();
+  if(activeAdminTab==="dishes") renderDishesTab();
+}
+
+/* ---------- ВКЛАДКА ЦЕЛИ ---------- */
+function renderGoalsTab(){
+  const goals=cloudEaten.goals||{};
+  const staticView=document.getElementById("goalsStaticView"); staticView.innerHTML="";
+
+  PROFILES.forEach(p=>{
+    const g=goals[p.uid]||{kcal:2000,protein:120,fat:70,carbs:200};
+    const block=document.createElement("div"); block.className="goals-profile-block";
+    const nameEl=document.createElement("div"); nameEl.className="goals-profile-name"; nameEl.textContent=p.name;
+    block.appendChild(nameEl);
+    const kpiGrid=document.createElement("div"); kpiGrid.className="goals-kpi-grid";
+    [{val:g.kcal,lbl:"Ккал"},{val:g.protein+"г",lbl:"Белки"},{val:g.fat+"г",lbl:"Жиры"},{val:g.carbs+"г",lbl:"Углеводы"}].forEach(c=>{
+      const cell=document.createElement("div"); cell.className="goals-kpi-cell";
+      const v=document.createElement("div"); v.className="goals-kpi-val"; v.textContent=c.val;
+      const l=document.createElement("div"); l.className="goals-kpi-lbl"; l.textContent=c.lbl;
+      cell.appendChild(v); cell.appendChild(l); kpiGrid.appendChild(cell);
+    });
+    block.appendChild(kpiGrid);
+    staticView.appendChild(block);
+  });
+
+  // Кнопка изменить
+  const toggleBtn=document.getElementById("goalsEditToggleBtn");
+  const editForm=document.getElementById("goalsEditForm");
+  // Сбрасываем обработчик
+  const newToggle=toggleBtn.cloneNode(true); toggleBtn.parentNode.replaceChild(newToggle,toggleBtn);
+  newToggle.addEventListener("click",()=>{
+    editForm.classList.toggle("open");
+    newToggle.textContent=editForm.classList.contains("open")?"Скрыть":"Изменить цели";
+    if(editForm.classList.contains("open")) renderGoalsEditForm();
+  });
+
+  // Если форма уже открыта — перерендерить
+  if(editForm.classList.contains("open")) renderGoalsEditForm();
+}
+
+function renderGoalsEditForm(){
+  const goals=cloudEaten.goals||{};
+  const settingsEl=document.getElementById("profileSettings"); settingsEl.innerHTML="";
+  PROFILES.forEach(p=>{
+    const g=goals[p.uid]||{kcal:2000,protein:120,fat:70,carbs:200};
+    const block=document.createElement("div"); block.className="profile-edit-block";
+    const nameEl=document.createElement("div"); nameEl.className="profile-edit-name"; nameEl.textContent=p.name;
+    block.appendChild(nameEl);
+    [["kcal","Калории",g.kcal],["protein","Белки (г)",g.protein],["fat","Жиры (г)",g.fat],["carbs","Углеводы (г)",g.carbs]].forEach(([field,label,val])=>{
+      const row=document.createElement("div"); row.className="settings-row";
+      const lbl=document.createElement("label"); lbl.textContent=label;
+      const inp=document.createElement("input"); inp.type="number"; inp.value=val; inp.dataset.uid=p.uid; inp.dataset.field=field;
+      row.appendChild(lbl); row.appendChild(inp); block.appendChild(row);
+    });
+    settingsEl.appendChild(block);
+  });
+
+  // Пересоздаём кнопку сохранения чтобы не дублировать обработчики
+  const oldBtn=document.getElementById("saveSettingsBtn");
+  const newBtn=oldBtn.cloneNode(true); oldBtn.parentNode.replaceChild(newBtn,oldBtn);
+  newBtn.addEventListener("click",async()=>{
+    const statusEl=document.getElementById("settingsStatus"); statusEl.textContent="Сохранение…";
+    settingsEl.querySelectorAll("input").forEach(inp=>{
+      const uid=inp.dataset.uid, field=inp.dataset.field;
+      if(!cloudEaten.goals[uid]) cloudEaten.goals[uid]={};
+      cloudEaten.goals[uid][field]=Number(inp.value)||0;
+    });
+    try{
+      await saveEaten();
+      statusEl.textContent="Сохранено ✓";
+      setTimeout(()=>{ statusEl.textContent=""; renderGoalsTab(); },1500);
+    }catch(e){ statusEl.textContent="Ошибка сохранения"; }
+  });
+}
+
+/* ---------- ВКЛАДКА БЛЮДА ---------- */
+function renderDishesTab(){
   const tabsEl2=document.getElementById("adminTabs"); tabsEl2.innerHTML="";
   CATEGORIES.forEach(cat=>{
-    const btn=document.createElement("button");
-    btn.className="admin-cat-tab"+(adminCat===cat.key?" active":"");
-    btn.textContent=cat.label;
-    btn.addEventListener("click",()=>{ adminCat=cat.key; renderAdmin(); });
-    tabsEl2.appendChild(btn);
+    const btn=document.createElement("button"); btn.className="admin-cat-tab"+(adminCat===cat.key?" active":""); btn.textContent=cat.label;
+    btn.addEventListener("click",()=>{ adminCat=cat.key; renderDishesTab(); }); tabsEl2.appendChild(btn);
   });
- 
   const listEl=document.getElementById("adminDishList"); listEl.innerHTML="";
   const dishes=allDishes.filter(d=>d.category===adminCat).sort((a,b)=>a.name.localeCompare(b.name,"ru"));
   if(!dishes.length){ listEl.innerHTML='<div class="empty">В этой категории пока нет блюд</div>'; }
-  else{
-    dishes.forEach(d=>{
-      const item=document.createElement("div"); item.className="admin-dish-item";
-      item.innerHTML=`<div class="admin-dish-header"><div class="admin-dish-info"><div class="info"></div><div class="meta"></div></div><div class="admin-dish-actions"></div></div><div class="admin-edit-form"></div>`;
-      item.querySelector(".info").textContent=d.name+(d.isCustom?"":" (встроенное)");
-      item.querySelector(".meta").textContent=`${d.kcal} ккал · ${d.portion}`;
-      if(d.isCustom){
-        const btnContainer=item.querySelector(".admin-dish-actions");
-        const editBtn=document.createElement("button"); editBtn.textContent="Изменить";
-        editBtn.addEventListener("click",e=>{
-          e.stopPropagation();
-          const expanded=item.classList.contains("expanded");
-          if(expanded){ item.classList.remove("expanded"); editBtn.classList.remove("active"); item.querySelector(".admin-edit-form").innerHTML=""; }
-          else{ createAdminEditForm(d,item.querySelector(".admin-edit-form"),item,editBtn); item.classList.add("expanded"); editBtn.classList.add("active"); }
-        });
-        const delBtn=document.createElement("button"); delBtn.textContent="Удалить";
-        delBtn.addEventListener("click",e=>{ e.stopPropagation(); deleteCustomDish(d.id); });
-        btnContainer.appendChild(editBtn); btnContainer.appendChild(delBtn);
-      }
-      listEl.appendChild(item);
-    });
-  }
- 
-  // Форма добавления — инициализируется один раз
+  else dishes.forEach(d=>{
+    const item=document.createElement("div"); item.className="admin-dish-item";
+    item.innerHTML=`<div class="admin-dish-header"><div class="admin-dish-info"><div class="info"></div><div class="meta"></div></div><div class="admin-dish-actions"></div></div><div class="admin-edit-form"></div>`;
+    item.querySelector(".info").textContent=d.name+(d.isCustom?"":" (встроенное)");
+    item.querySelector(".meta").textContent=`${d.kcal} ккал · ${d.portion}`;
+    if(d.isCustom){
+      const bc=item.querySelector(".admin-dish-actions");
+      const editBtn=document.createElement("button"); editBtn.textContent="Изменить";
+      editBtn.addEventListener("click",e=>{
+        e.stopPropagation();
+        const exp=item.classList.contains("expanded");
+        if(exp){ item.classList.remove("expanded"); editBtn.classList.remove("active"); item.querySelector(".admin-edit-form").innerHTML=""; }
+        else{ createAdminEditForm(d,item.querySelector(".admin-edit-form"),item,editBtn); item.classList.add("expanded"); editBtn.classList.add("active"); }
+      });
+      const delBtn=document.createElement("button"); delBtn.textContent="Удалить";
+      delBtn.addEventListener("click",e=>{ e.stopPropagation(); deleteCustomDish(d.id); });
+      bc.appendChild(editBtn); bc.appendChild(delBtn);
+    }
+    listEl.appendChild(item);
+  });
+
   const formEl=document.getElementById("addDishForm");
   if(!formEl.dataset.initialized){
     formEl.innerHTML=`
@@ -902,61 +1168,47 @@ function renderAdmin(){
       <label>Белки (г)</label><input type="number" id="nP" placeholder="12">
       <label>Жиры (г)</label><input type="number" id="nF" placeholder="9">
       <label>Углеводы (г)</label><input type="number" id="nC" placeholder="45">
-      <label>Порция</label>
-      <div class="flex-row"><input type="number" id="nPortionVal" placeholder="300" style="flex:1;"><select id="nPortionUnit" style="flex:1;">${["г","мл","шт","ст.л.","ч.л."].map(u=>`<option value="${u}">${u}</option>`).join("")}</select></div>
-      <label>Время приготовления</label>
-      <div class="flex-row"><input type="number" id="nTimeVal" placeholder="15" style="flex:1;"><select id="nTimeUnit" style="flex:1;"><option value="мин" selected>мин</option><option value="ч">ч</option></select></div>
+      <label>Порция (г)</label><input type="number" id="nPortionVal" placeholder="300">
+      <label>Время приготовления</label><div class="flex-row"><input type="number" id="nTimeVal" placeholder="15" style="flex:1;"><select id="nTimeUnit" style="flex:1;"><option value="мин" selected>мин</option><option value="ч">ч</option></select></div>
       <label>Ингредиенты</label><textarea id="nIngr" placeholder="Говядина (150 г), лук (30 г)"></textarea>
       <label>Рецепт</label><textarea id="nRecipe" placeholder="Пошаговое приготовление"></textarea>
       <button class="save-btn" id="submitNewDishBtn">Добавить</button>
-      <div class="sync-status" id="addDishStatus"></div>
-    `;
+      <div class="sync-status" id="addDishStatus"></div>`;
     formEl.dataset.initialized="true";
     document.getElementById("submitNewDishBtn").addEventListener("click",addCustomDish);
   }
-  // Синхронизируем категорию в форме с текущей вкладкой
   if(document.getElementById("nCat")) document.getElementById("nCat").value=adminCat;
   document.getElementById("showAddFormBtn").onclick=()=>{
     formEl.style.display=formEl.style.display==="none"?"block":"none";
     if(formEl.style.display==="block") clearAddForm();
   };
 }
- 
+
 function clearAddForm(){
   ["nName","nKcal","nP","nF","nC","nPortionVal","nTimeVal","nIngr","nRecipe"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=""; });
-  if(document.getElementById("nPortionUnit")) document.getElementById("nPortionUnit").value="г";
-  if(document.getElementById("nTimeUnit")) document.getElementById("nTimeUnit").value="мин";
-  if(document.getElementById("addDishStatus")) document.getElementById("addDishStatus").textContent="";
   if(document.getElementById("nCat")) document.getElementById("nCat").value=adminCat;
+  if(document.getElementById("addDishStatus")) document.getElementById("addDishStatus").textContent="";
 }
- 
+
 async function addCustomDish(){
   const name=document.getElementById("nName").value.trim(); if(!name) return alert("Введите название");
   const statusEl=document.getElementById("addDishStatus"); statusEl.textContent="Сохранение…";
-  const pv=document.getElementById("nPortionVal").value.trim(), pu=document.getElementById("nPortionUnit").value;
+  const pv=document.getElementById("nPortionVal").value.trim();
   const tv=document.getElementById("nTimeVal").value.trim(), tu=document.getElementById("nTimeUnit").value;
   const dish={
-    id:"custom_"+Date.now(), name,
-    category:document.getElementById("nCat").value,
-    kcal:Number(document.getElementById("nKcal").value)||0,
-    protein:Number(document.getElementById("nP").value)||0,
-    fat:Number(document.getElementById("nF").value)||0,
-    carbs:Number(document.getElementById("nC").value)||0,
-    portion:pv?`${pv} ${pu}`:"—",
-    time:tv?`${tv} ${tu}`:"—",
-    ingredients:document.getElementById("nIngr").value||"",
-    recipe:document.getElementById("nRecipe").value||"",
+    id:"custom_"+Date.now(), name, category:document.getElementById("nCat").value,
+    kcal:Number(document.getElementById("nKcal").value)||0, protein:Number(document.getElementById("nP").value)||0,
+    fat:Number(document.getElementById("nF").value)||0, carbs:Number(document.getElementById("nC").value)||0,
+    portion:pv?`${pv} г`:"—", time:tv?`${tv} ${tu}`:"—",
+    ingredients:document.getElementById("nIngr").value||"", recipe:document.getElementById("nRecipe").value||"",
     favorite:false, isCustom:true
   };
   cloudDishes.push(dish);
-  try{
-    await saveDishes(); prepareAllDishes();
-    adminCat=dish.category; renderAdmin();
-    document.getElementById("addDishForm").style.display="none";
-  }catch(e){ cloudDishes.pop(); statusEl.textContent="Ошибка сохранения"; }
+  try{ await saveDishes(); prepareAllDishes(); adminCat=dish.category; renderDishesTab(); document.getElementById("addDishForm").style.display="none"; }
+  catch(e){ cloudDishes.pop(); statusEl.textContent="Ошибка сохранения"; }
 }
- 
-function createAdminEditForm(dish,formContainer,item,editBtn){
+
+function createAdminEditForm(dish, formContainer, item, editBtn){
   const pp=parsePortion(dish.portion), tp=parsePortion(dish.time);
   formContainer.innerHTML=`
     <label>Название</label><input type="text" class="edit-name">
@@ -965,115 +1217,105 @@ function createAdminEditForm(dish,formContainer,item,editBtn){
     <label>Белки (г)</label><input type="number" class="edit-protein">
     <label>Жиры (г)</label><input type="number" class="edit-fat">
     <label>Углеводы (г)</label><input type="number" class="edit-carbs">
-    <label>Порция</label>
-    <div class="flex-row"><input type="number" class="edit-portion-val" style="flex:1;"><select class="edit-portion-unit" style="flex:1;">${["г","мл","шт","ст.л.","ч.л."].map(u=>`<option value="${u}" ${u===pp.unit?"selected":""}>${u}</option>`).join("")}</select></div>
-    <label>Время приготовления</label>
-    <div class="flex-row"><input type="number" class="edit-time-val" style="flex:1;"><select class="edit-time-unit" style="flex:1;"><option value="мин" ${tp.unit==="мин"?"selected":""}>мин</option><option value="ч" ${tp.unit==="ч"?"selected":""}>ч</option></select></div>
+    <label>Порция (г)</label><input type="number" class="edit-pv">
+    <label>Время</label><div class="flex-row"><input type="number" class="edit-tv" style="flex:1;"><select class="edit-tu" style="flex:1;"><option value="мин" ${tp.unit==="мин"?"selected":""}>мин</option><option value="ч" ${tp.unit==="ч"?"selected":""}>ч</option></select></div>
     <label>Ингредиенты</label><textarea class="edit-ingr"></textarea>
     <label>Рецепт</label><textarea class="edit-recipe"></textarea>
-    <div class="flex-row mt-12">
-      <button class="save-btn edit-save-btn" style="flex:1;" disabled>Сохранить</button>
-      <button class="save-btn edit-cancel-btn" style="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;">Отмена</button>
-    </div>
-    <div class="sync-status edit-status"></div>
-  `;
-  // Заполняем поля
+    <div class="flex-row mt-12"><button class="save-btn edit-save-btn" style="flex:1;" disabled>Сохранить</button><button class="save-btn edit-cancel-btn" style="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;">Отмена</button></div>
+    <div class="sync-status edit-status"></div>`;
   formContainer.querySelector(".edit-name").value=dish.name;
   formContainer.querySelector(".edit-kcal").value=dish.kcal;
   formContainer.querySelector(".edit-protein").value=dish.protein;
   formContainer.querySelector(".edit-fat").value=dish.fat;
   formContainer.querySelector(".edit-carbs").value=dish.carbs;
-  formContainer.querySelector(".edit-portion-val").value=pp.value;
-  formContainer.querySelector(".edit-time-val").value=tp.value;
+  formContainer.querySelector(".edit-pv").value=pp.value;
+  formContainer.querySelector(".edit-tv").value=tp.value;
   formContainer.querySelector(".edit-ingr").value=dish.ingredients;
   formContainer.querySelector(".edit-recipe").value=dish.recipe;
- 
-  const getValues=()=>({
+
+  const getVals=()=>({
     name:formContainer.querySelector(".edit-name").value.trim(),
     category:formContainer.querySelector(".edit-cat").value,
     kcal:Number(formContainer.querySelector(".edit-kcal").value)||0,
     protein:Number(formContainer.querySelector(".edit-protein").value)||0,
     fat:Number(formContainer.querySelector(".edit-fat").value)||0,
     carbs:Number(formContainer.querySelector(".edit-carbs").value)||0,
-    portion:`${formContainer.querySelector(".edit-portion-val").value.trim()} ${formContainer.querySelector(".edit-portion-unit").value}`,
-    time:`${formContainer.querySelector(".edit-time-val").value.trim()} ${formContainer.querySelector(".edit-time-unit").value}`,
+    portion:`${formContainer.querySelector(".edit-pv").value.trim()} г`,
+    time:`${formContainer.querySelector(".edit-tv").value.trim()} ${formContainer.querySelector(".edit-tu").value}`,
     ingredients:formContainer.querySelector(".edit-ingr").value,
-    recipe:formContainer.querySelector(".edit-recipe").value,
+    recipe:formContainer.querySelector(".edit-recipe").value
   });
-  const original=getValues();
-  const saveBtn=formContainer.querySelector(".edit-save-btn");
-  formContainer.querySelectorAll("input,select,textarea").forEach(el=>{
-    el.addEventListener("input",()=>{ saveBtn.disabled=!Object.keys(getValues()).some(k=>getValues()[k]!==original[k]); });
-  });
- 
-  formContainer.querySelector(".edit-cancel-btn").addEventListener("click",()=>{
-    item.classList.remove("expanded"); editBtn.classList.remove("active"); formContainer.innerHTML="";
-  });
- 
+  const orig=getVals(), saveBtn=formContainer.querySelector(".edit-save-btn");
+  formContainer.querySelectorAll("input,select,textarea").forEach(el=>el.addEventListener("input",()=>{
+    const cur=getVals(); saveBtn.disabled=!Object.keys(cur).some(k=>String(cur[k])!==String(orig[k]));
+  }));
+  formContainer.querySelector(".edit-cancel-btn").addEventListener("click",()=>{ item.classList.remove("expanded"); editBtn.classList.remove("active"); formContainer.innerHTML=""; });
   saveBtn.addEventListener("click",async()=>{
     const statusEl=formContainer.querySelector(".edit-status"); statusEl.textContent="Сохранение…";
-    const updated={id:dish.id,...getValues(),favorite:dish.favorite,isCustom:true};
-    const prev=[...cloudDishes];
-    const idx=cloudDishes.findIndex(d=>d.id===dish.id);
-    if(idx!==-1) cloudDishes[idx]=updated;
-    try{
-      await saveDishes(); prepareAllDishes();
-      item.classList.remove("expanded"); editBtn.classList.remove("active"); formContainer.innerHTML="";
-      renderAdmin();
-    }catch(e){ cloudDishes=prev; prepareAllDishes(); statusEl.textContent="Ошибка сохранения"; }
+    const updated={id:dish.id,...getVals(),favorite:dish.favorite,isCustom:true};
+    const prev=[...cloudDishes]; const idx=cloudDishes.findIndex(d=>d.id===dish.id); if(idx!==-1) cloudDishes[idx]=updated;
+    try{ await saveDishes(); prepareAllDishes(); item.classList.remove("expanded"); editBtn.classList.remove("active"); formContainer.innerHTML=""; renderDishesTab(); }
+    catch(e){ cloudDishes=prev; prepareAllDishes(); statusEl.textContent="Ошибка сохранения"; }
   });
 }
- 
+
 async function deleteCustomDish(id){
-  if(!confirm("Удалить блюдо? Все запланированные приёмы с ним будут очищены.")) return;
+  if(!await askConfirm("Вы действительно хотите удалить блюдо?")) return;
   const prevDishes=[...cloudDishes], prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
   cloudDishes=cloudDishes.filter(d=>d.id!==id);
   Object.keys(cloudPlan.plan).forEach(ds=>{
     CATEGORIES.forEach(c=>{ if(getDishId(cloudPlan.plan[ds][c.key])===id) delete cloudPlan.plan[ds][c.key]; });
     if(!Object.keys(cloudPlan.plan[ds]).length) delete cloudPlan.plan[ds];
   });
-  try{
-    await Promise.all([saveDishes(),savePlan()]); prepareAllDishes(); renderAdmin();
-    if(document.getElementById("mainView").style.display!=="none") render();
-  }catch(e){
-    alert("Ошибка удаления."); cloudDishes=prevDishes; cloudPlan.plan=prevPlan; prepareAllDishes(); renderAdmin();
-  }
+  try{ await Promise.all([saveDishes(),savePlan()]); prepareAllDishes(); renderDishesTab(); if(document.getElementById("mainView").style.display!=="none") render(); }
+  catch(e){ alert("Ошибка удаления."); cloudDishes=prevDishes; cloudPlan.plan=prevPlan; prepareAllDishes(); renderDishesTab(); }
 }
- 
-/* ==========================================================
+
+/* ============================================================
    ИНИЦИАЛИЗАЦИЯ
-   ========================================================== */
+   ============================================================ */
 async function init(){
   document.getElementById("today").textContent=new Date().toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
- 
+
   document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>setView(btn.dataset.view)));
-  document.getElementById("dayPrev").addEventListener("click",()=>{ if(planOffset>-30){ planOffset--; updatePlanNav(); renderPlanDay(); } });
+
+  // Вкладки админки
+  document.querySelectorAll(".admin-tab-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{ activeAdminTab=btn.dataset.adminTab; renderAdmin(); });
+  });
+
+  document.getElementById("dayPrev").addEventListener("click",()=>{ if(planOffset>0){ planOffset--; updatePlanNav(); renderPlanDay(); } });
   document.getElementById("dayNext").addEventListener("click",()=>{ planOffset++; updatePlanNav(); renderPlanDay(); });
   document.getElementById("histPrev").addEventListener("click",()=>{ histOffset--; updateHistNav(); renderHistDay(); });
   document.getElementById("histNext").addEventListener("click",()=>{ histOffset++; updateHistNav(); renderHistDay(); });
   document.getElementById("searchInput").addEventListener("input",e=>{ searchQuery=e.target.value.trim(); render(); });
-  document.getElementById("popupClose").addEventListener("click",()=>{ document.getElementById("planPopup").style.display="none"; });
+
+  document.getElementById("popupClose").addEventListener("click",()=>document.getElementById("planPopup").style.display="none");
   document.getElementById("planPopup").addEventListener("click",e=>{ if(e.target===document.getElementById("planPopup")) document.getElementById("planPopup").style.display="none"; });
   document.getElementById("popupSaveBtn").addEventListener("click",savePopup);
- 
+
+  document.getElementById("eatenPopupClose").addEventListener("click",()=>document.getElementById("eatenPopup").style.display="none");
+  document.getElementById("eatenPopup").addEventListener("click",e=>{ if(e.target===document.getElementById("eatenPopup")) document.getElementById("eatenPopup").style.display="none"; });
+  document.getElementById("eatenPortionInput").addEventListener("input",()=>{ if(eatenCtx) updateEatenPreview(eatenCtx.dish); });
+  document.getElementById("eatenSaveBtn").addEventListener("click",saveEatenEntry);
+  document.getElementById("eatenClearBtn").addEventListener("click",clearEatenEntry);
+
   CATEGORIES.forEach(cat=>{
     const btn=document.createElement("button"); btn.textContent=cat.label; btn.dataset.key=cat.key;
     if(cat.key===activeCat) btn.classList.add("active");
     btn.addEventListener("click",()=>{ activeCat=cat.key; render(); });
     tabsEl.appendChild(btn);
   });
- 
-  try{ await Promise.all([loadDishes(),loadPlan()]); }
+
+  try{ await Promise.all([loadDishes(),loadPlan(),loadEaten()]); }
   catch(e){ console.error("Ошибка загрузки данных",e); }
- 
+
   prepareAllDishes();
   loadBought();
   setView("main");
   document.getElementById("loadingOverlay").style.display="none";
 }
- 
 init();
 </script>
 </body>
 </html>
- 
