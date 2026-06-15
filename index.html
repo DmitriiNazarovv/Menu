@@ -89,7 +89,7 @@
   .profile-totals:last-child{margin-bottom:0;}
   .profile-totals-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;}
 
-  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
   .kpi-cell{background:var(--accent-bg);border-radius:7px;padding:8px 4px;text-align:center;}
   .kpi-cell-val{font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;color:var(--accent);line-height:1.1;overflow-wrap:anywhere;}
   .kpi-cell-val.over{color:#c0392b;}
@@ -631,7 +631,7 @@ async function savePopup(){
 /* ============================================================
    ПОПАП "СЪЕДЕНО" — с новым превью 2×2
    ============================================================ */
-let eatenCtx=null;
+let eatenCtx=null, eatenOriginalPortionValue=0;
 
 function openEatenPopup(dateS, catKey, dish, profile){
   eatenCtx={dateS,catKey,dish,uid:profile.uid};
@@ -642,9 +642,16 @@ function openEatenPopup(dateS, catKey, dish, profile){
   document.getElementById("eatenStatus").textContent="";
   const existing=getCatEaten(dateS,profile.uid,catKey);
   const pp=existing?.portion?parsePortion(existing.portion):{value:base.value,unit:base.unit};
+  eatenOriginalPortionValue=existing?.portion?(Number(pp.value)||0):0;
   document.getElementById("eatenPortionInput").value=pp.value||"";
   updateEatenPreview(dish);
+  updateEatenSaveState();
   document.getElementById("eatenPopup").style.display="flex";
+}
+
+function updateEatenSaveState(){
+  const v=Number(document.getElementById("eatenPortionInput").value)||0;
+  document.getElementById("eatenSaveBtn").disabled=v<=0||v===eatenOriginalPortionValue;
 }
 
 function updateEatenPreview(dish){
@@ -838,10 +845,10 @@ function renderDayTotals(ds, container){
 
     const kpiGrid=document.createElement("div"); kpiGrid.className="kpi-grid";
     const cells=[
-      {val:`${totals.kcal}/${goal.kcal}`,           lbl:"Ккал", over:kcalOver},
       {val:`${totals.protein}/${goal.protein}г`,   lbl:"Белки", over:totals.protein>goal.protein},
       {val:`${totals.fat}/${goal.fat}г`,           lbl:"Жиры", over:totals.fat>goal.fat},
-      {val:`${totals.carbs}/${goal.carbs}г`,       lbl:"Углеводы", over:totals.carbs>goal.carbs}
+      {val:`${totals.carbs}/${goal.carbs}г`,       lbl:"Углеводы", over:totals.carbs>goal.carbs},
+      {val:`${totals.kcal}/${goal.kcal}`,          lbl:"Ккал", over:kcalOver}
     ];
     cells.forEach(c=>{
       const cell=document.createElement("div"); cell.className="kpi-cell";
@@ -1296,7 +1303,11 @@ async function init(){
 
   document.getElementById("eatenPopupClose").addEventListener("click",()=>document.getElementById("eatenPopup").style.display="none");
   document.getElementById("eatenPopup").addEventListener("click",e=>{ if(e.target===document.getElementById("eatenPopup")) document.getElementById("eatenPopup").style.display="none"; });
-  document.getElementById("eatenPortionInput").addEventListener("input",()=>{ if(eatenCtx) updateEatenPreview(eatenCtx.dish); });
+  document.getElementById("eatenPortionInput").addEventListener("input",()=>{
+    if(!eatenCtx) return;
+    updateEatenPreview(eatenCtx.dish);
+    updateEatenSaveState();
+  });
   document.getElementById("eatenSaveBtn").addEventListener("click",saveEatenEntry);
   document.getElementById("eatenClearBtn").addEventListener("click",clearEatenEntry);
 
