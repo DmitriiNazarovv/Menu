@@ -79,6 +79,16 @@
   .card-edit-btn:active{color:var(--paper);background:var(--accent);}
   .local-edit-form{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
   .today-card.expanded .local-edit-form{display:block;}
+  .meal-block{border-bottom:1px solid var(--line);padding:16px 2px;}
+  .meal-block:last-child{border-bottom:none;}
+  .meal-title{font-family:-apple-system,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:10px;}
+  .meal-item{position:relative;background:transparent;border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:8px;}
+  .meal-item:last-child{margin-bottom:0;}
+  .meal-item .dish-name-plain{font-size:17px;padding-right:36px;}
+  .meal-edit-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+  .meal-edit-row select{flex:1;min-width:0;font-family:-apple-system,sans-serif;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;appearance:none;}
+  .tiny-action-btn{font-family:-apple-system,sans-serif;font-size:13px;border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:8px;padding:9px 10px;cursor:pointer;}
+  .meal-add-btn{width:100%;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:none;color:var(--accent);background:var(--accent-bg);padding:11px;border-radius:8px;text-align:center;cursor:pointer;margin-top:8px;}
 
   /* ===================== ИТОГО ЗА ДЕНЬ ===================== */
   .day-totals{margin-top:20px;background:var(--accent-bg);border-radius:10px;padding:14px;}
@@ -100,11 +110,11 @@
   .profile-goal-text{font-family:-apple-system,sans-serif;font-size:10px;color:var(--muted);margin-top:4px;text-align:right;}
 
   /* ===================== ПРЕВЬЮ КБЖУ в попапах — единый стиль ===================== */
-  /* Сетка 2×2 для порций (без /цели) */
-  .portion-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
-  .portion-kpi-cell{background:var(--accent-bg);border-radius:7px;padding:8px 6px;text-align:center;}
-  .portion-kpi-val{font-family:-apple-system,sans-serif;font-size:15px;font-weight:700;color:var(--accent);line-height:1.1;}
-  .portion-kpi-lbl{font-family:-apple-system,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-top:3px;}
+  /* Сетка 1×4 для порций (без /цели) */
+  .portion-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
+  .portion-kpi-cell{background:var(--accent-bg);border-radius:7px;padding:8px 4px;text-align:center;min-width:0;}
+  .portion-kpi-val{font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;color:var(--accent);line-height:1.1;overflow-wrap:anywhere;}
+  .portion-kpi-lbl{font-family:-apple-system,sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:3px;}
 
   /* Кнопка съедено */
   .eaten-btn{font-family:-apple-system,sans-serif;font-size:12px;font-weight:500;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;margin-top:6px;display:inline-block;}
@@ -175,14 +185,16 @@
   .goals-edit-btn:active{background:var(--ink);color:var(--paper);}
 
   /* Форма редактирования целей */
-  .goals-edit-form{display:none;margin-top:16px;}
+  .goals-edit-form{display:none;margin-top:16px;background:var(--accent-bg);border-radius:10px;padding:14px;}
   .goals-edit-form.open{display:block;}
-  .settings-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;background:var(--paper);border-radius:7px;padding:8px 10px;}
+  .settings-row:last-child{margin-bottom:0;}
   .settings-row label{font-family:-apple-system,sans-serif;font-size:14px;color:var(--ink);}
   .settings-row input{width:90px;font-family:-apple-system,sans-serif;font-size:14px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none;text-align:right;}
   .settings-row input:focus{border-color:var(--accent);}
-  .profile-edit-block{margin-bottom:20px;}
-  .profile-edit-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:10px;}
+  .profile-edit-block{margin-bottom:16px;}
+  .profile-edit-block:last-child{margin-bottom:0;}
+  .profile-edit-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;}
 
   /* Блюда в админке */
   .admin-cat-tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0;margin-bottom:6px;-webkit-overflow-scrolling:touch;}
@@ -356,16 +368,39 @@
 /* ============================================================
    КОНФИГУРАЦИЯ
    ============================================================ */
-const MENU = { breakfast:[], lunch:[], dinner:[], snack:[] };
+const MENU = {};
+const DATA_VERSION = "meals-v2";
 const CATEGORIES = [
-  {key:"breakfast", label:"Завтрак"},
-  {key:"lunch",     label:"Обед"},
-  {key:"dinner",    label:"Ужин"},
-  {key:"snack",     label:"Перекус"}
+  {key:"breakfasts", label:"Завтраки"},
+  {key:"main",       label:"Основное"},
+  {key:"sides",      label:"Гарниры"},
+  {key:"salads",     label:"Салаты"},
+  {key:"desserts",   label:"Десерты"},
+  {key:"soups",      label:"Супы"},
+  {key:"snacks",     label:"Закуски"},
+  {key:"drinks",     label:"Напитки"}
 ];
 const PROFILES = [
   {uid:"dima",   name:"Дима"},
   {uid:"natela", name:"Натела"}
+];
+const DEFAULT_GOALS = {
+  dima:{kcal:2000,protein:120,fat:70,carbs:200},
+  natela:{kcal:1600,protein:100,fat:55,carbs:160}
+};
+const DEFAULT_DISHES = [
+  {id:"test_omelet",name:"Омлет с сыром",category:"breakfasts",kcal:360,protein:24,fat:26,carbs:5,portion:"220 г",time:"12 мин",ingredients:"Яйца (120 г), сыр (40 г), молоко (40 мл), масло (10 г)",recipe:"Взбить яйца с молоком, добавить сыр и приготовить на сковороде.",favorite:true,isCustom:true},
+  {id:"test_oatmeal",name:"Овсянка с ягодами",category:"breakfasts",kcal:310,protein:10,fat:8,carbs:50,portion:"280 г",time:"10 мин",ingredients:"Овсянка (60 г), молоко (180 мл), ягоды (40 г)",recipe:"Сварить овсянку на молоке и добавить ягоды.",favorite:false,isCustom:true},
+  {id:"test_chicken",name:"Куриная грудка",category:"main",kcal:285,protein:43,fat:10,carbs:1,portion:"180 г",time:"25 мин",ingredients:"Куриная грудка (180 г), масло (8 г), специи",recipe:"Приправить и запечь или обжарить до готовности.",favorite:true,isCustom:true},
+  {id:"test_salmon",name:"Лосось запеченный",category:"main",kcal:410,protein:36,fat:28,carbs:0,portion:"180 г",time:"20 мин",ingredients:"Лосось (180 г), лимон (20 г), масло (5 г)",recipe:"Запечь с лимоном и специями.",favorite:false,isCustom:true},
+  {id:"test_rice",name:"Рис басмати",category:"sides",kcal:260,protein:5,fat:1,carbs:58,portion:"200 г",time:"18 мин",ingredients:"Рис (70 г), вода, соль",recipe:"Промыть рис и отварить до готовности.",favorite:false,isCustom:true},
+  {id:"test_potato",name:"Картофельное пюре",category:"sides",kcal:240,protein:5,fat:9,carbs:36,portion:"220 г",time:"25 мин",ingredients:"Картофель (220 г), молоко (40 мл), масло (10 г)",recipe:"Отварить картофель и размять с молоком и маслом.",favorite:false,isCustom:true},
+  {id:"test_greek_salad",name:"Греческий салат",category:"salads",kcal:220,protein:7,fat:17,carbs:10,portion:"250 г",time:"10 мин",ingredients:"Огурец (80 г), томаты (100 г), фета (50 г), масло (10 г)",recipe:"Нарезать овощи, добавить фету и масло.",favorite:false,isCustom:true},
+  {id:"test_napoleon",name:"Наполеон",category:"desserts",kcal:430,protein:6,fat:25,carbs:45,portion:"120 г",time:"—",ingredients:"Тесто слоеное, крем заварной",recipe:"Готовый десерт порционно.",favorite:true,isCustom:true},
+  {id:"test_borscht",name:"Борщ",category:"soups",kcal:210,protein:12,fat:9,carbs:20,portion:"350 г",time:"60 мин",ingredients:"Свекла (80 г), капуста (80 г), говядина (80 г), картофель (70 г)",recipe:"Сварить бульон, добавить овощи и томить до готовности.",favorite:false,isCustom:true},
+  {id:"test_hummus",name:"Хумус с овощами",category:"snacks",kcal:260,protein:9,fat:15,carbs:24,portion:"180 г",time:"8 мин",ingredients:"Хумус (100 г), морковь (40 г), огурец (40 г)",recipe:"Подать хумус с нарезанными овощами.",favorite:false,isCustom:true},
+  {id:"test_cappuccino",name:"Капучино",category:"drinks",kcal:110,protein:6,fat:6,carbs:9,portion:"250 г",time:"5 мин",ingredients:"Эспрессо (40 мл), молоко (180 мл)",recipe:"Приготовить эспрессо и добавить вспененное молоко.",favorite:true,isCustom:true},
+  {id:"test_morse",name:"Ягодный морс",category:"drinks",kcal:90,protein:0,fat:0,carbs:22,portion:"250 г",time:"10 мин",ingredients:"Ягоды (60 г), вода (220 мл), сахар (15 г)",recipe:"Проварить ягоды с водой и сахаром, процедить.",favorite:false,isCustom:true}
 ];
 
 const JSONBIN_KEY = "$2a$10$4wA7T6em0ATgsI36drn8Ie4xNUEB77cklSxKuv7LOXVJbQAhds2Xe";
@@ -374,8 +409,8 @@ const PLAN_URL    = "https://api.jsonbin.io/v3/b/6a2edf1bda38895dfebf7989";
 const EATEN_URL   = "https://api.jsonbin.io/v3/b/6a2da444da38895dfebb3efa";
 
 let cloudDishes = [];
-let cloudPlan   = { plan:{}, favorites:{} };
-let cloudEaten  = { goals:{ dima:{kcal:2000,protein:120,fat:70,carbs:200}, natela:{kcal:1600,protein:100,fat:55,carbs:160} } };
+let cloudPlan   = { dataVersion:DATA_VERSION, plan:{}, favorites:{} };
+let cloudEaten  = { dataVersion:DATA_VERSION, goals:JSON.parse(JSON.stringify(DEFAULT_GOALS)) };
 let allDishes   = [];
 
 /* ============================================================
@@ -389,21 +424,80 @@ async function apiFetch(url, options={}){
   if(!res.ok) throw new Error("HTTP "+res.status);
   return res.json();
 }
-async function loadDishes(){ const d=await apiFetch(DISHES_URL+"/latest"); cloudDishes=d.record?.customDishes||[]; }
-async function saveDishes(){ await apiFetch(DISHES_URL,{method:"PUT",body:JSON.stringify({customDishes:cloudDishes})}); }
+async function loadDishes(){
+  try{
+    const d=await apiFetch(DISHES_URL+"/latest");
+    if(d.record?.dataVersion===DATA_VERSION){ cloudDishes=d.record.customDishes||[]; return; }
+    cloudDishes=JSON.parse(JSON.stringify(DEFAULT_DISHES));
+    await saveDishes();
+  }catch(e){
+    console.warn("Не удалось загрузить блюда, используются тестовые данные",e);
+    cloudDishes=JSON.parse(JSON.stringify(DEFAULT_DISHES));
+  }
+}
+async function saveDishes(){ await apiFetch(DISHES_URL,{method:"PUT",body:JSON.stringify({dataVersion:DATA_VERSION,customDishes:cloudDishes})}); }
 async function loadPlan(){
-  const d=await apiFetch(PLAN_URL+"/latest");
-  cloudPlan=d.record||{plan:{},favorites:{}};
-  cloudPlan.plan=cloudPlan.plan||{}; cloudPlan.favorites=cloudPlan.favorites||{};
+  try{
+    const d=await apiFetch(PLAN_URL+"/latest");
+    if(d.record?.dataVersion!==DATA_VERSION){
+      cloudPlan={dataVersion:DATA_VERSION,plan:createDefaultPlan(),favorites:{}};
+      await savePlan();
+      return;
+    }
+    cloudPlan=d.record||{dataVersion:DATA_VERSION,plan:{},favorites:{}};
+    cloudPlan.dataVersion=DATA_VERSION;
+    cloudPlan.plan=cloudPlan.plan||{}; cloudPlan.favorites=cloudPlan.favorites||{};
+  }catch(e){
+    console.warn("Не удалось загрузить план, используется тестовый план",e);
+    cloudPlan={dataVersion:DATA_VERSION,plan:createDefaultPlan(),favorites:{}};
+  }
 }
-async function savePlan(){ await apiFetch(PLAN_URL,{method:"PUT",body:JSON.stringify(cloudPlan)}); }
+async function savePlan(){ await apiFetch(PLAN_URL,{method:"PUT",body:JSON.stringify({...cloudPlan,dataVersion:DATA_VERSION})}); }
+function createDefaultPlan(){
+  return {
+    [dateStr(0)]:{meals:[
+      {id:makeId("meal"),name:"Завтрак",items:[
+        {id:makeId("item"),dishId:"test_oatmeal",customPortion:null},
+        {id:makeId("item"),dishId:"test_cappuccino",customPortion:null}
+      ]},
+      {id:makeId("meal"),name:"Обед",items:[
+        {id:makeId("item"),dishId:"test_chicken",customPortion:null},
+        {id:makeId("item"),dishId:"test_rice",customPortion:null},
+        {id:makeId("item"),dishId:"test_greek_salad",customPortion:null}
+      ]},
+      {id:makeId("meal"),name:"Ужин",items:[
+        {id:makeId("item"),dishId:"test_salmon",customPortion:null},
+        {id:makeId("item"),dishId:"test_potato",customPortion:null}
+      ]}
+    ]},
+    [dateStr(1)]:{meals:[
+      {id:makeId("meal"),name:"Завтрак",items:[
+        {id:makeId("item"),dishId:"test_omelet",customPortion:null}
+      ]},
+      {id:makeId("meal"),name:"Перекус",items:[
+        {id:makeId("item"),dishId:"test_hummus",customPortion:null}
+      ]}
+    ]}
+  };
+}
 async function loadEaten(){
-  const d=await apiFetch(EATEN_URL+"/latest");
-  cloudEaten=d.record||{};
-  if(!cloudEaten.goals) cloudEaten.goals={ dima:{kcal:2000,protein:120,fat:70,carbs:200}, natela:{kcal:1600,protein:100,fat:55,carbs:160} };
-  PROFILES.forEach(p=>{ if(!cloudEaten.goals[p.uid]) cloudEaten.goals[p.uid]={kcal:2000,protein:120,fat:70,carbs:200}; });
+  try{
+    const d=await apiFetch(EATEN_URL+"/latest");
+    if(d.record?.dataVersion!==DATA_VERSION){
+      cloudEaten={dataVersion:DATA_VERSION,goals:JSON.parse(JSON.stringify(DEFAULT_GOALS))};
+      await saveEaten();
+      return;
+    }
+    cloudEaten=d.record||{};
+  }catch(e){
+    console.warn("Не удалось загрузить историю питания, используются цели по умолчанию",e);
+    cloudEaten={dataVersion:DATA_VERSION,goals:JSON.parse(JSON.stringify(DEFAULT_GOALS))};
+  }
+  cloudEaten.dataVersion=DATA_VERSION;
+  if(!cloudEaten.goals) cloudEaten.goals=JSON.parse(JSON.stringify(DEFAULT_GOALS));
+  PROFILES.forEach(p=>{ if(!cloudEaten.goals[p.uid]) cloudEaten.goals[p.uid]={...DEFAULT_GOALS[p.uid]}; });
 }
-async function saveEaten(){ await apiFetch(EATEN_URL,{method:"PUT",body:JSON.stringify(cloudEaten)}); }
+async function saveEaten(){ await apiFetch(EATEN_URL,{method:"PUT",body:JSON.stringify({...cloudEaten,dataVersion:DATA_VERSION})}); }
 
 /* ============================================================
    БЛЮДА
@@ -415,6 +509,35 @@ function prepareAllDishes(){
 }
 function getDishById(id){ return allDishes.find(d=>d.id===id); }
 function getDishId(val){ return typeof val==="object"?val?.dishId:val; }
+function makeId(prefix){ return prefix+"_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7); }
+function getDayMeals(dayPlan){
+  if(!dayPlan) return [];
+  if(Array.isArray(dayPlan.meals)) return dayPlan.meals;
+  return [];
+}
+function makeEmptyMeal(index){ return {id:makeId("meal"),name:`Прием пищи ${index}`,items:[]}; }
+function cleanDayPlan(dayPlan){
+  const meals=getDayMeals(dayPlan).map((meal,idx)=>({
+    id:meal.id||makeId("meal"),
+    name:(meal.name||`Прием пищи ${idx+1}`).trim(),
+    items:(meal.items||[]).filter(item=>getDishById(getDishId(item))).map(item=>({
+      id:item.id||makeId("item"),
+      dishId:getDishId(item),
+      customPortion:item.customPortion||null
+    }))
+  })).filter(meal=>meal.items.length);
+  return meals.length?{meals}:null;
+}
+function getPlanEntries(dayPlan){
+  const entries=[];
+  getDayMeals(dayPlan).forEach(meal=>{
+    (meal.items||[]).forEach(item=>{
+      const dishId=getDishId(item), dish=getDishById(dishId);
+      if(dish) entries.push({meal,item,dish,dishId,entryKey:item.id});
+    });
+  });
+  return entries;
+}
 function isFavorite(dish){ return cloudPlan.favorites[dish.id]??!!dish.favorite; }
 async function toggleFavorite(dish){
   const prev=isFavorite(dish); cloudPlan.favorites[dish.id]=!prev; render();
@@ -501,18 +624,18 @@ function buildPortionKpiGrid(kcal, protein, fat, carbs){
 function getDayEaten(dateS, uid){
   const userDay=(cloudEaten[dateS]||{})[uid]||{};
   let kcal=0,protein=0,fat=0,carbs=0;
-  CATEGORIES.forEach(cat=>{
-    const e=userDay[cat.key]; if(!e) return;
+  Object.values(userDay).forEach(e=>{
+    if(!e) return;
     kcal+=e.kcal||0; protein+=e.protein||0; fat+=e.fat||0; carbs+=e.carbs||0;
   });
   return {kcal:Math.round(kcal),protein:Math.round(protein*10)/10,fat:Math.round(fat*10)/10,carbs:Math.round(carbs*10)/10};
 }
-function getCatEaten(dateS, uid, catKey){ return (cloudEaten[dateS]?.[uid]?.[catKey])||null; }
-async function setEaten(dateS, uid, catKey, data){
+function getCatEaten(dateS, uid, entryKey){ return (cloudEaten[dateS]?.[uid]?.[entryKey])||null; }
+async function setEaten(dateS, uid, entryKey, data){
   if(!cloudEaten[dateS]) cloudEaten[dateS]={};
   if(!cloudEaten[dateS][uid]) cloudEaten[dateS][uid]={};
-  if(data===null){ delete cloudEaten[dateS][uid][catKey]; }
-  else{ cloudEaten[dateS][uid][catKey]=data; }
+  if(data===null){ delete cloudEaten[dateS][uid][entryKey]; }
+  else{ cloudEaten[dateS][uid][entryKey]=data; }
   await saveEaten();
 }
 
@@ -534,7 +657,7 @@ function setView(viewId){
    ГЛАВНЫЙ ЭКРАН
    ============================================================ */
 const tabsEl=document.getElementById("tabs"), contentEl=document.getElementById("content");
-let activeCat="breakfast", searchQuery="";
+let activeCat="breakfasts", searchQuery="";
 
 function renderDish(d){
   const card=document.createElement("div"); card.className="dish";
@@ -579,32 +702,46 @@ function render(){
 /* ============================================================
    ПОПАП ПЛАНИРОВАНИЯ
    ============================================================ */
-let popupDish=null, popupState={};
+let popupDish=null, popupState={}, popupNewMealNames={};
 function openPlanPopup(dish){
-  popupDish=dish; popupState={};
+  popupDish=dish; popupState={}; popupNewMealNames={};
   for(let i=0;i<=6;i++){
-    const ds=dateStr(i), day=cloudPlan.plan[ds]||{};
-    popupState[i]={};
-    CATEGORIES.forEach(c=>{ popupState[i][c.key]=(getDishId(day[c.key])===dish.id); });
+    const ds=dateStr(i), meals=getDayMeals(cloudPlan.plan[ds]);
+    const existing=meals.find(meal=>(meal.items||[]).some(item=>getDishId(item)===dish.id));
+    popupState[i]=existing?existing.id:"";
   }
   document.getElementById("popupDishName").textContent=dish.name;
   document.getElementById("popupStatus").textContent="";
   const container=document.getElementById("popupDays"); container.innerHTML="";
   for(let i=0;i<=6;i++){
+    const ds=dateStr(i), meals=getDayMeals(cloudPlan.plan[ds]);
     const section=document.createElement("div"); section.className="popup-day-section";
     const lbl=document.createElement("div"); lbl.className="popup-day-label";
     lbl.textContent=humanDayName(i)+" · "+formatDate(dateStr(i)); section.appendChild(lbl);
-    CATEGORIES.forEach(cat=>{
-      const row=document.createElement("div"); row.className="popup-cat-row";
-      const nm=document.createElement("div"); nm.className="popup-cat-name"; nm.textContent=cat.label;
-      const btn=document.createElement("button");
-      const on=popupState[i][cat.key]; btn.className="popup-toggle "+(on?"on":"off"); btn.textContent=on?"✓ Добавлено":"Добавить";
-      btn.addEventListener("click",()=>{
-        popupState[i][cat.key]=!popupState[i][cat.key];
-        btn.className="popup-toggle "+(popupState[i][cat.key]?"on":"off"); btn.textContent=popupState[i][cat.key]?"✓ Добавлено":"Добавить";
-      });
-      row.appendChild(nm); row.appendChild(btn); section.appendChild(row);
+    const row=document.createElement("div"); row.className="popup-cat-row";
+    const nm=document.createElement("div"); nm.className="popup-cat-name"; nm.textContent="Прием пищи";
+    const sel=document.createElement("select");
+    sel.style.cssText="font-family:-apple-system,sans-serif;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 12px;max-width:210px;";
+    const none=document.createElement("option"); none.value=""; none.textContent="Не добавлять"; sel.appendChild(none);
+    meals.forEach(meal=>{
+      const o=document.createElement("option"); o.value=meal.id; o.textContent=meal.name||"Прием пищи";
+      if(popupState[i]===meal.id) o.selected=true; sel.appendChild(o);
     });
+    const add=document.createElement("option"); add.value="__new"; add.textContent="+ Новый прием пищи"; sel.appendChild(add);
+    const newNameInput=document.createElement("input");
+    newNameInput.type="text";
+    newNameInput.value=`Прием пищи ${meals.length+1}`;
+    newNameInput.style.cssText="display:none;width:100%;font-family:-apple-system,sans-serif;font-size:13px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;";
+    newNameInput.addEventListener("input",()=>{ popupNewMealNames[i]=newNameInput.value; });
+    const updateNewNameInput=()=>{
+      const isNew=popupState[i]==="__new";
+      newNameInput.style.display=isNew?"block":"none";
+      if(isNew&&!popupNewMealNames[i]) popupNewMealNames[i]=newNameInput.value;
+    };
+    sel.addEventListener("change",()=>{ popupState[i]=sel.value; updateNewNameInput(); });
+    row.appendChild(nm); row.appendChild(sel); section.appendChild(row);
+    section.appendChild(newNameInput);
+    updateNewNameInput();
     container.appendChild(section);
   }
   document.getElementById("planPopup").style.display="flex";
@@ -614,13 +751,32 @@ async function savePopup(){
   const prev=JSON.parse(JSON.stringify(cloudPlan.plan));
   for(let i=0;i<=6;i++){
     const ds=dateStr(i);
-    if(!cloudPlan.plan[ds]) cloudPlan.plan[ds]={};
-    CATEGORIES.forEach(cat=>{
-      const old=getDishId(cloudPlan.plan[ds][cat.key]);
-      if(popupState[i][cat.key]){ if(old!==popupDish.id) cloudPlan.plan[ds][cat.key]={dishId:popupDish.id}; }
-      else { if(old===popupDish.id) delete cloudPlan.plan[ds][cat.key]; }
+    const selected=popupState[i];
+    let day=cloudPlan.plan[ds]||{meals:[]};
+    let existingItem=null;
+    getDayMeals(day).forEach(meal=>{
+      const found=(meal.items||[]).find(item=>getDishId(item)===popupDish.id);
+      if(found&&!existingItem) existingItem=found;
     });
-    if(!Object.keys(cloudPlan.plan[ds]).length) delete cloudPlan.plan[ds];
+    day.meals=getDayMeals(day).map(meal=>({
+      ...meal,
+      items:(meal.items||[]).filter(item=>getDishId(item)!==popupDish.id)
+    }));
+    if(selected){
+      let meal;
+      if(selected==="__new"){
+        meal=makeEmptyMeal(day.meals.length+1);
+        meal.name=(popupNewMealNames[i]||meal.name).trim()||meal.name;
+        day.meals.push(meal);
+      }else{
+        meal=day.meals.find(m=>m.id===selected);
+        if(!meal){ meal=makeEmptyMeal(day.meals.length+1); day.meals.push(meal); }
+      }
+      meal.items=meal.items||[];
+      meal.items.push(existingItem||{id:makeId("item"),dishId:popupDish.id,customPortion:null});
+    }
+    const cleaned=cleanDayPlan(day);
+    if(cleaned) cloudPlan.plan[ds]=cleaned; else delete cloudPlan.plan[ds];
   }
   try{
     await savePlan(); document.getElementById("popupStatus").textContent="Сохранено ✓";
@@ -633,14 +789,14 @@ async function savePopup(){
    ============================================================ */
 let eatenCtx=null, eatenOriginalPortionValue=0;
 
-function openEatenPopup(dateS, catKey, dish, profile){
-  eatenCtx={dateS,catKey,dish,uid:profile.uid};
+function openEatenPopup(dateS, entryKey, dish, profile){
+  eatenCtx={dateS,entryKey,dish,uid:profile.uid};
   const base=parsePortion(dish.portion);
   document.getElementById("eatenDishName").textContent=dish.name;
   document.getElementById("eatenDishBase").textContent=`Базовая порция: ${dish.portion} · ${dish.kcal} ккал`;
   document.getElementById("eatenProfileLabel").textContent=profile.name;
   document.getElementById("eatenStatus").textContent="";
-  const existing=getCatEaten(dateS,profile.uid,catKey);
+  const existing=getCatEaten(dateS,profile.uid,entryKey);
   const pp=existing?.portion?parsePortion(existing.portion):{value:base.value,unit:base.unit};
   eatenOriginalPortionValue=existing?.portion?(Number(pp.value)||0):0;
   document.getElementById("eatenPortionInput").value=pp.value||"";
@@ -663,7 +819,7 @@ function updateEatenPreview(dish){
 }
 
 async function saveEatenEntry(){
-  const {dateS,catKey,dish,uid}=eatenCtx;
+  const {dateS,entryKey,dish,uid}=eatenCtx;
   const v=parseFloat(document.getElementById("eatenPortionInput").value)||0;
   if(v<=0){ alert("Введите количество"); return; }
   const base=parsePortion(dish.portion);
@@ -671,17 +827,17 @@ async function saveEatenEntry(){
   const data={kcal:n.kcal,protein:n.protein,fat:n.fat,carbs:n.carbs,portion:`${v} г`,dishId:dish.id};
   document.getElementById("eatenStatus").textContent="Сохранение…";
   try{
-    await setEaten(dateS,uid,catKey,data);
+    await setEaten(dateS,uid,entryKey,data);
     document.getElementById("eatenStatus").textContent="Сохранено ✓";
     setTimeout(()=>{ document.getElementById("eatenPopup").style.display="none"; renderPlanDay(); },700);
   }catch(e){ document.getElementById("eatenStatus").textContent="Ошибка сохранения"; }
 }
 
 async function clearEatenEntry(){
-  const {dateS,catKey,uid}=eatenCtx;
+  const {dateS,entryKey,uid}=eatenCtx;
   document.getElementById("eatenStatus").textContent="Удаление…";
   try{
-    await setEaten(dateS,uid,catKey,null);
+    await setEaten(dateS,uid,entryKey,null);
     document.getElementById("eatenStatus").textContent="Очищено";
     setTimeout(()=>{ document.getElementById("eatenPopup").style.display="none"; renderPlanDay(); },500);
   }catch(e){ document.getElementById("eatenStatus").textContent="Ошибка"; }
@@ -706,115 +862,106 @@ function renderPlanDay(){
   c2.innerHTML=""; ef.style.display="none"; actions.style.display="none";
   document.getElementById("planStatus").textContent="";
 
-  const entries=CATEGORIES.filter(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; });
-  if(!entries.length){
+  const meals=getDayMeals(dayPlan);
+  if(!getPlanEntries(dayPlan).length){
     c2.innerHTML=`<div class="empty">На этот день ничего не запланировано.</div>`;
     const btn=document.createElement("button"); btn.className="edit-btn"; btn.textContent="+ Добавить план";
     btn.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(btn);
     return;
   }
 
-  CATEGORIES.forEach(cat=>{
-    const val=dayPlan[cat.key]; if(!val) return;
-    const dishId=getDishId(val); if(!dishId||dishId==="skip") return;
-    const dish=getDishById(dishId); if(!dish) return;
-    const custom=typeof val==="object"?val:{};
-    const portionStr=custom.customPortion||dish.portion;
-    const portionGrams=parsePortion(portionStr).value;
-    const n=calcNutrition(dish, portionGrams);
+  meals.forEach(meal=>{
+    const block=document.createElement("div"); block.className="meal-block";
+    const title=document.createElement("div"); title.className="meal-title"; title.textContent=meal.name||"Прием пищи";
+    block.appendChild(title);
+    (meal.items||[]).forEach(item=>{
+      const dishId=getDishId(item), dish=getDishById(dishId); if(!dish) return;
+      const portionStr=item.customPortion||dish.portion;
+      const portionGrams=parsePortion(portionStr).value;
+      const n=calcNutrition(dish, portionGrams);
+      const card=document.createElement("div"); card.className="meal-item today-card";
 
-    const card=document.createElement("div"); card.className="today-card";
+      const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
+      const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
+      card.appendChild(dName); card.appendChild(dMeta);
 
-    const catLbl=document.createElement("div"); catLbl.className="cat-label"; catLbl.textContent=cat.label;
-    const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
-    const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
-    card.appendChild(catLbl); card.appendChild(dName); card.appendChild(dMeta);
+      const btnArea=document.createElement("div"); btnArea.style.cssText="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;";
+      PROFILES.forEach(profile=>{
+        const eaten=getCatEaten(ds,profile.uid,item.id);
+        const btn=document.createElement("button");
+        btn.className="eaten-btn "+(eaten?"eaten":"not-eaten");
+        btn.textContent=eaten?`${profile.name}: ${eaten.kcal} ккал (${eaten.portion})`:`${profile.name}: отметить`;
+        btn.addEventListener("click",()=>openEatenPopup(ds,item.id,dish,profile));
+        btnArea.appendChild(btn);
+      });
+      card.appendChild(btnArea);
 
-    // Кнопки съедено
-    const btnArea=document.createElement("div"); btnArea.style.cssText="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;";
-    PROFILES.forEach(profile=>{
-      const eaten=getCatEaten(ds,profile.uid,cat.key);
-      const btn=document.createElement("button");
-      btn.className="eaten-btn "+(eaten?"eaten":"not-eaten");
-      btn.textContent=eaten?`${profile.name}: ${eaten.kcal} ккал (${eaten.portion})`:`${profile.name}: отметить`;
-      btn.addEventListener("click",()=>openEatenPopup(ds,cat.key,dish,profile));
-      btnArea.appendChild(btn);
+      const editBtn=document.createElement("button"); editBtn.className="card-edit-btn"; editBtn.textContent="✎";
+      editBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.toggle("expanded"); });
+      card.appendChild(editBtn);
+
+      const form=document.createElement("div"); form.className="local-edit-form";
+      const baseParsed=parsePortion(dish.portion);
+      const curGrams=portionGrams||baseParsed.value;
+      const formInner=document.createElement("div"); formInner.style.fontFamily="-apple-system,sans-serif";
+
+      const mealLbl=document.createElement("div");
+      mealLbl.style.cssText="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px;";
+      mealLbl.textContent="Название приема пищи"; formInner.appendChild(mealLbl);
+      const mealNameInput=document.createElement("input");
+      mealNameInput.type="text"; mealNameInput.value=meal.name||"Прием пищи";
+      mealNameInput.style.cssText="width:100%;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;margin-bottom:12px;";
+      formInner.appendChild(mealNameInput);
+
+      const portionLbl=document.createElement("div");
+      portionLbl.style.cssText="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px;";
+      portionLbl.textContent="Порция, г"; formInner.appendChild(portionLbl);
+      const portionInput=document.createElement("input");
+      portionInput.type="number"; portionInput.value=curGrams; portionInput.step="any";
+      portionInput.style.cssText="width:100%;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;margin-bottom:6px;";
+      formInner.appendChild(portionInput);
+      const baseHint=document.createElement("div"); baseHint.className="portion-hint"; baseHint.textContent=`Базовая: ${dish.portion}`;
+      formInner.appendChild(baseHint);
+      const previewWrap=document.createElement("div"); previewWrap.style.marginTop="10px"; formInner.appendChild(previewWrap);
+      const originalPortionValue=Number(curGrams)||0;
+      function updateLocalPreview(){
+        const g=parseFloat(portionInput.value)||0, nn=calcNutrition(dish,g);
+        previewWrap.innerHTML=""; previewWrap.appendChild(buildPortionKpiGrid(nn.kcal,nn.protein,nn.fat,nn.carbs));
+      }
+      portionInput.addEventListener("input",updateLocalPreview); updateLocalPreview();
+      const btnRow2=document.createElement("div"); btnRow2.className="flex-row mt-8";
+      const saveBtn2=document.createElement("button"); saveBtn2.className="save-btn"; saveBtn2.style.flex="1"; saveBtn2.textContent="Сохранить"; saveBtn2.disabled=true;
+      const cancelBtn=document.createElement("button"); cancelBtn.className="save-btn";
+      cancelBtn.style.cssText="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;"; cancelBtn.textContent="Отмена";
+      const locStatus=document.createElement("div"); locStatus.className="sync-status";
+      const originalMealName=meal.name||"Прием пищи";
+      const updateLocalSaveState=()=>{
+        saveBtn2.disabled=(Number(portionInput.value)||0)===originalPortionValue&&mealNameInput.value.trim()===originalMealName;
+      };
+      portionInput.addEventListener("input",updateLocalSaveState);
+      mealNameInput.addEventListener("input",updateLocalSaveState);
+      updateLocalSaveState();
+      cancelBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.remove("expanded"); });
+      saveBtn2.addEventListener("click",async e=>{
+        e.stopPropagation();
+        if(saveBtn2.disabled) return;
+        locStatus.textContent="Сохранение…";
+        const gVal=portionInput.value.trim();
+        const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
+        const targetMeal=getDayMeals(cloudPlan.plan[ds]).find(m=>(m.items||[]).some(x=>x.id===item.id));
+        const target=targetMeal?.items?.find(x=>x.id===item.id);
+        if(targetMeal) targetMeal.name=mealNameInput.value.trim()||targetMeal.name||"Прием пищи";
+        if(target) target.customPortion=gVal?`${gVal} г`:null;
+        try{
+          await savePlan(); locStatus.textContent="Сохранено ✓";
+          setTimeout(()=>{ card.classList.remove("expanded"); renderPlanDay(); },600);
+        }catch(err){ cloudPlan.plan=prevPlan; locStatus.textContent="Ошибка"; }
+      });
+      btnRow2.appendChild(saveBtn2); btnRow2.appendChild(cancelBtn);
+      formInner.appendChild(btnRow2); formInner.appendChild(locStatus);
+      form.appendChild(formInner); card.appendChild(form); block.appendChild(card);
     });
-    card.appendChild(btnArea);
-
-    // Кнопка ✎ редактирования порции
-    const editBtn=document.createElement("button"); editBtn.className="card-edit-btn"; editBtn.textContent="✎";
-    editBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.toggle("expanded"); });
-    card.appendChild(editBtn);
-
-    // Форма редактирования порции — только граммы + превью 2×2
-    const form=document.createElement("div"); form.className="local-edit-form";
-    const baseParsed=parsePortion(dish.portion);
-    const curGrams=portionGrams||baseParsed.value;
-
-    const formInner=document.createElement("div"); formInner.style.fontFamily="-apple-system,sans-serif";
-
-    const portionLbl=document.createElement("div");
-    portionLbl.style.cssText="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:6px;";
-    portionLbl.textContent="Порция, г";
-    formInner.appendChild(portionLbl);
-
-    const portionInput=document.createElement("input");
-    portionInput.type="number"; portionInput.value=curGrams; portionInput.step="any";
-    portionInput.style.cssText="width:100%;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;outline:none;margin-bottom:6px;";
-    formInner.appendChild(portionInput);
-
-    const baseHint=document.createElement("div"); baseHint.className="portion-hint";
-    baseHint.textContent=`Базовая: ${dish.portion}`;
-    formInner.appendChild(baseHint);
-
-    // Превью КБЖУ 2×2
-    const previewWrap=document.createElement("div"); previewWrap.style.marginTop="10px";
-    formInner.appendChild(previewWrap);
-
-    const originalPortionValue=Number(curGrams)||0;
-    function updateLocalPreview(){
-      const g=parseFloat(portionInput.value)||0;
-      const nn=calcNutrition(dish,g);
-      previewWrap.innerHTML="";
-      previewWrap.appendChild(buildPortionKpiGrid(nn.kcal,nn.protein,nn.fat,nn.carbs));
-    }
-    portionInput.addEventListener("input",updateLocalPreview);
-    updateLocalPreview();
-
-    // Кнопки сохранить / отмена
-    const btnRow2=document.createElement("div"); btnRow2.className="flex-row mt-8";
-    const saveBtn2=document.createElement("button"); saveBtn2.className="save-btn"; saveBtn2.style.flex="1"; saveBtn2.textContent="Сохранить";
-    saveBtn2.disabled=true;
-    const cancelBtn=document.createElement("button"); cancelBtn.className="save-btn";
-    cancelBtn.style.cssText="flex:1;background:transparent;color:var(--ink);border:1px solid var(--ink);margin-top:8px;";
-    cancelBtn.textContent="Отмена";
-    const locStatus=document.createElement("div"); locStatus.className="sync-status";
-    const updateLocalSaveState=()=>{
-      const currentValue=Number(portionInput.value)||0;
-      saveBtn2.disabled=currentValue===originalPortionValue;
-    };
-    portionInput.addEventListener("input",updateLocalSaveState);
-
-    cancelBtn.addEventListener("click",e=>{ e.stopPropagation(); card.classList.remove("expanded"); });
-    saveBtn2.addEventListener("click",async e=>{
-      e.stopPropagation();
-      locStatus.textContent="Сохранение…";
-      const gVal=portionInput.value.trim();
-      const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
-      cloudPlan.plan[ds]=cloudPlan.plan[ds]||{};
-      cloudPlan.plan[ds][cat.key]={dishId:dishId, customPortion:gVal?`${gVal} г`:null};
-      try{
-        await savePlan(); locStatus.textContent="Сохранено ✓";
-        setTimeout(()=>{ card.classList.remove("expanded"); renderPlanDay(); },600);
-      }catch(err){ cloudPlan.plan=prevPlan; locStatus.textContent="Ошибка"; }
-    });
-
-    btnRow2.appendChild(saveBtn2); btnRow2.appendChild(cancelBtn);
-    formInner.appendChild(btnRow2); formInner.appendChild(locStatus);
-    form.appendChild(formInner);
-    card.appendChild(form);
-    c2.appendChild(card);
+    c2.appendChild(block);
   });
 
   renderDayTotals(ds, c2);
@@ -875,40 +1022,62 @@ function renderDayTotals(ds, container){
 }
 
 function showPlanEditForm(ds){
-  const dayPlan=cloudPlan.plan[ds]||{};
+  let draft=JSON.parse(JSON.stringify(cloudPlan.plan[ds]||{meals:[]}));
+  if(!getDayMeals(draft).length) draft={meals:[makeEmptyMeal(1)]};
   document.getElementById("planContent").innerHTML="";
   const ef=document.getElementById("planEditForm"), actions=document.getElementById("planEditActions");
   const saveBtn=document.getElementById("planSaveBtn");
   ef.style.display="block"; actions.style.display="flex"; ef.innerHTML="";
   saveBtn.disabled=true;
   document.getElementById("planStatus").textContent="";
-  const originalPlanValues={};
-  CATEGORIES.forEach(cat=>{
-    const row=document.createElement("div"); row.className="plan-row";
-    const lbl=document.createElement("label"); lbl.textContent=cat.label;
-    const sel=document.createElement("select"); sel.dataset.cat=cat.key;
-    originalPlanValues[cat.key]=getDishId(dayPlan[cat.key])||"";
-    const empty=document.createElement("option"); empty.value=""; empty.textContent="— не выбрано —"; sel.appendChild(empty);
-    allDishes.filter(d=>d.category===cat.key).sort((a,b)=>a.name.localeCompare(b.name,"ru")).forEach(d=>{
-      const o=document.createElement("option"); o.value=d.id; o.textContent=d.name;
-      if(getDishId(dayPlan[cat.key])===d.id) o.selected=true; sel.appendChild(o);
+  const originalJSON=JSON.stringify(cleanDayPlan(draft)||{meals:[]});
+  const renderEditor=()=>{
+    ef.innerHTML="";
+    draft.meals.forEach((meal,mealIdx)=>{
+      const block=document.createElement("div"); block.className="plan-row";
+      const name=document.createElement("input");
+      name.type="text"; name.value=meal.name||`Прием пищи ${mealIdx+1}`;
+      name.style.cssText="width:100%;font-family:-apple-system,sans-serif;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:11px 12px;margin-bottom:10px;";
+      name.addEventListener("input",()=>{ meal.name=name.value; updatePlanSaveState(); });
+      block.appendChild(name);
+      (meal.items||[]).forEach((item,itemIdx)=>{
+        const row=document.createElement("div"); row.className="meal-edit-row";
+        const sel=document.createElement("select"); sel.value=getDishId(item)||"";
+        const empty=document.createElement("option"); empty.value=""; empty.textContent="— выберите блюдо —"; sel.appendChild(empty);
+        CATEGORIES.forEach(cat=>{
+          const group=document.createElement("optgroup"); group.label=cat.label;
+          allDishes.filter(d=>d.category===cat.key).sort((a,b)=>a.name.localeCompare(b.name,"ru")).forEach(d=>{
+            const o=document.createElement("option"); o.value=d.id; o.textContent=d.name;
+            if(getDishId(item)===d.id) o.selected=true; group.appendChild(o);
+          });
+          sel.appendChild(group);
+        });
+        sel.addEventListener("change",()=>{ item.dishId=sel.value; updatePlanSaveState(); });
+        const del=document.createElement("button"); del.type="button"; del.className="tiny-action-btn"; del.textContent="×";
+        del.addEventListener("click",()=>{ meal.items.splice(itemIdx,1); renderEditor(); updatePlanSaveState(); });
+        row.appendChild(sel); row.appendChild(del); block.appendChild(row);
+      });
+      const addDish=document.createElement("button"); addDish.type="button"; addDish.className="meal-add-btn"; addDish.textContent="+ Добавить блюдо";
+      addDish.addEventListener("click",()=>{ meal.items.push({id:makeId("item"),dishId:"",customPortion:null}); renderEditor(); updatePlanSaveState(); });
+      block.appendChild(addDish);
+      if(draft.meals.length>1||!(meal.items||[]).length){
+        const delMeal=document.createElement("button"); delMeal.type="button"; delMeal.className="tiny-action-btn"; delMeal.style.marginTop="8px"; delMeal.textContent="Удалить прием пищи";
+        delMeal.addEventListener("click",()=>{ draft.meals.splice(mealIdx,1); if(!draft.meals.length) draft.meals.push(makeEmptyMeal(1)); renderEditor(); updatePlanSaveState(); });
+        block.appendChild(delMeal);
+      }
+      ef.appendChild(block);
     });
-    row.appendChild(lbl); row.appendChild(sel); ef.appendChild(row);
-  });
-  const updatePlanSaveState=()=>{
-    saveBtn.disabled=![...ef.querySelectorAll("select")].some(s=>s.value!==originalPlanValues[s.dataset.cat]);
+    const addMeal=document.createElement("button"); addMeal.type="button"; addMeal.className="edit-btn"; addMeal.textContent="+ Добавить прием пищи";
+    addMeal.addEventListener("click",()=>{ draft.meals.push(makeEmptyMeal(draft.meals.length+1)); renderEditor(); updatePlanSaveState(); });
+    ef.appendChild(addMeal);
   };
-  ef.querySelectorAll("select").forEach(s=>s.addEventListener("change",updatePlanSaveState));
+  const updatePlanSaveState=()=>{ saveBtn.disabled=JSON.stringify(cleanDayPlan(draft)||{meals:[]})===originalJSON; };
+  renderEditor();
   saveBtn.onclick=async()=>{
     document.getElementById("planStatus").textContent="Сохранение…";
     const prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
-    const newDay={};
-    ef.querySelectorAll("select").forEach(s=>{
-      if(!s.value) return;
-      const ex=cloudPlan.plan[ds]?.[s.dataset.cat];
-      newDay[s.dataset.cat]=(getDishId(ex)===s.value)?ex:{dishId:s.value};
-    });
-    if(!Object.keys(newDay).length) delete cloudPlan.plan[ds]; else cloudPlan.plan[ds]=newDay;
+    const newDay=cleanDayPlan(draft);
+    if(!newDay) delete cloudPlan.plan[ds]; else cloudPlan.plan[ds]=newDay;
     try{
       await savePlan(); document.getElementById("planStatus").textContent="Сохранено ✓";
       ef.style.display="none"; actions.style.display="none";
@@ -944,9 +1113,8 @@ function buildIngredientMap(days){
   const map=new Map();
   for(let i=0;i<days;i++){
     const ds=dateStr(i), dayPlan=cloudPlan.plan[ds]||{};
-    CATEGORIES.forEach(cat=>{
-      const dishId=getDishId(dayPlan[cat.key]); if(!dishId||dishId==="skip") return;
-      const dish=getDishById(dishId); if(!dish||!dish.ingredients) return;
+    getPlanEntries(dayPlan).forEach(({dish})=>{
+      if(!dish.ingredients) return;
       dish.ingredients.split(",").forEach(raw=>{
         const p=parseIngredient(raw), key=p.name;
         if(!map.has(key)) map.set(key,{name:p.name,qty:0,unit:p.unit});
@@ -1004,7 +1172,7 @@ let histOffset=-1;
 function findNearestHistoryDay(){
   for(let i=-1;i>=-365;i--){
     const ds=dateStr(i),dayPlan=cloudPlan.plan[ds]||{};
-    if(CATEGORIES.some(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; })) return i;
+    if(getPlanEntries(dayPlan).length) return i;
   }
   return -1;
 }
@@ -1018,30 +1186,36 @@ function updateHistNav(){
 function renderHistDay(){
   const ds=dateStr(histOffset), dayPlan=cloudPlan.plan[ds]||{};
   const el=document.getElementById("historyContent"); el.innerHTML="";
-  const entries=CATEGORIES.filter(c=>{ const id=getDishId(dayPlan[c.key]); return id&&id!=="skip"; });
-  if(!entries.length){ el.innerHTML='<div class="empty">В этот день ничего не было запланировано.</div>'; return; }
-  entries.forEach(cat=>{
-    const val=dayPlan[cat.key], dishId=getDishId(val);
-    const dish=getDishById(dishId); if(!dish) return;
-    const custom=typeof val==="object"?val:{};
-    const portionStr=custom.customPortion||dish.portion;
-    const portionGrams=parsePortion(portionStr).value;
-    const n=calcNutrition(dish,portionGrams);
-    const card=document.createElement("div"); card.className="today-card";
-    const catLbl=document.createElement("div"); catLbl.className="cat-label"; catLbl.textContent=cat.label;
-    const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
-    const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
-    card.appendChild(catLbl); card.appendChild(dName); card.appendChild(dMeta);
-    const eatenRow=document.createElement("div"); eatenRow.style.cssText="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;";
-    PROFILES.forEach(p=>{
-      const e=getCatEaten(ds,p.uid,cat.key);
-      const span=document.createElement("span");
-      span.style.cssText="font-family:-apple-system,sans-serif;font-size:11px;color:var(--muted);";
-      span.textContent=e?`${p.name}: ${e.kcal} ккал (${e.portion})`:`${p.name}: —`;
-      eatenRow.appendChild(span);
+  if(!getPlanEntries(dayPlan).length){ el.innerHTML='<div class="empty">В этот день ничего не было запланировано.</div>'; return; }
+  getDayMeals(dayPlan).forEach(meal=>{
+    const mealItems=(meal.items||[]).map(item=>({item,dish:getDishById(getDishId(item))})).filter(x=>x.dish);
+    if(!mealItems.length) return;
+
+    const block=document.createElement("div"); block.className="meal-block";
+    const title=document.createElement("div"); title.className="meal-title"; title.textContent=meal.name||"Прием пищи";
+    block.appendChild(title);
+
+    mealItems.forEach(({item,dish})=>{
+      const portionStr=item.customPortion||dish.portion;
+      const portionGrams=parsePortion(portionStr).value;
+      const n=calcNutrition(dish,portionGrams);
+      const card=document.createElement("div"); card.className="meal-item today-card";
+      const dName=document.createElement("div"); dName.className="dish-name-plain"; dName.textContent=dish.name;
+      const dMeta=document.createElement("div"); dMeta.className="dish-meta"; dMeta.textContent=`${n.kcal} ккал · ${portionGrams} г`;
+      card.appendChild(dName); card.appendChild(dMeta);
+      const eatenRow=document.createElement("div"); eatenRow.style.cssText="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;";
+      PROFILES.forEach(p=>{
+        const e=getCatEaten(ds,p.uid,item.id);
+        const span=document.createElement("span");
+        span.style.cssText="font-family:-apple-system,sans-serif;font-size:11px;color:var(--muted);";
+        span.textContent=e?`${p.name}: ${e.kcal} ккал (${e.portion})`:`${p.name}: —`;
+        eatenRow.appendChild(span);
+      });
+      card.appendChild(eatenRow);
+      block.appendChild(card);
     });
-    card.appendChild(eatenRow);
-    el.appendChild(card);
+
+    el.appendChild(block);
   });
   renderDayTotals(ds,el);
 }
@@ -1049,7 +1223,7 @@ function renderHistDay(){
 /* ============================================================
    АДМИНКА — вкладки Цели / Блюда
    ============================================================ */
-let adminCat="breakfast";
+let adminCat="breakfasts";
 let activeAdminTab="goals"; // "goals" | "dishes"
 
 function renderAdmin(){
@@ -1253,11 +1427,18 @@ function createAdminEditForm(dish, formContainer, item, editBtn){
     recipe:formContainer.querySelector(".edit-recipe").value
   });
   const orig=getVals(), saveBtn=formContainer.querySelector(".edit-save-btn");
-  formContainer.querySelectorAll("input,select,textarea").forEach(el=>el.addEventListener("input",()=>{
-    const cur=getVals(); saveBtn.disabled=!Object.keys(cur).some(k=>String(cur[k])!==String(orig[k]));
-  }));
+  const updateDishSaveState=()=>{
+    const cur=getVals();
+    saveBtn.disabled=!Object.keys(cur).some(k=>String(cur[k])!==String(orig[k]));
+  };
+  formContainer.querySelectorAll("input,select,textarea").forEach(el=>{
+    el.addEventListener("input",updateDishSaveState);
+    el.addEventListener("change",updateDishSaveState);
+  });
+  updateDishSaveState();
   formContainer.querySelector(".edit-cancel-btn").addEventListener("click",()=>{ item.classList.remove("expanded"); editBtn.classList.remove("active"); formContainer.innerHTML=""; });
   saveBtn.addEventListener("click",async()=>{
+    if(saveBtn.disabled) return;
     const statusEl=formContainer.querySelector(".edit-status"); statusEl.textContent="Сохранение…";
     const updated={id:dish.id,...getVals(),favorite:dish.favorite,isCustom:true};
     const prev=[...cloudDishes]; const idx=cloudDishes.findIndex(d=>d.id===dish.id); if(idx!==-1) cloudDishes[idx]=updated;
@@ -1271,8 +1452,13 @@ async function deleteCustomDish(id){
   const prevDishes=[...cloudDishes], prevPlan=JSON.parse(JSON.stringify(cloudPlan.plan));
   cloudDishes=cloudDishes.filter(d=>d.id!==id);
   Object.keys(cloudPlan.plan).forEach(ds=>{
-    CATEGORIES.forEach(c=>{ if(getDishId(cloudPlan.plan[ds][c.key])===id) delete cloudPlan.plan[ds][c.key]; });
-    if(!Object.keys(cloudPlan.plan[ds]).length) delete cloudPlan.plan[ds];
+    const day=cloudPlan.plan[ds]||{meals:[]};
+    day.meals=getDayMeals(day).map(meal=>({
+      ...meal,
+      items:(meal.items||[]).filter(item=>getDishId(item)!==id)
+    })).filter(meal=>(meal.items||[]).length);
+    const cleaned=cleanDayPlan(day);
+    if(cleaned) cloudPlan.plan[ds]=cleaned; else delete cloudPlan.plan[ds];
   });
   try{ await Promise.all([saveDishes(),savePlan()]); prepareAllDishes(); renderDishesTab(); if(document.getElementById("mainView").style.display!=="none") render(); }
   catch(e){ alert("Ошибка удаления."); cloudDishes=prevDishes; cloudPlan.plan=prevPlan; prepareAllDishes(); renderDishesTab(); }
