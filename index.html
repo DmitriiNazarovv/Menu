@@ -200,6 +200,7 @@
   .profile-edit-block{margin-bottom:16px;}
   .profile-edit-block:last-child{margin-bottom:0;}
   .profile-edit-name{font-family:-apple-system,sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .goals-save-btn{margin-top:14px;}
 
   /* Блюда в админке */
   .admin-cat-tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0;margin-bottom:6px;-webkit-overflow-scrolling:touch;}
@@ -311,7 +312,7 @@
       <button class="secondary-btn" id="goalsEditToggleBtn" style="width:100%;margin-top:12px;">Изменить цели</button>
       <div class="goals-edit-form" id="goalsEditForm">
         <div id="profileSettings"></div>
-        <button class="save-btn" id="saveSettingsBtn">Сохранить цели</button>
+        <button class="save-btn goals-save-btn" id="saveSettingsBtn" disabled>Сохранить цели</button>
         <div class="sync-status" id="settingsStatus"></div>
       </div>
 
@@ -1380,12 +1381,28 @@ function renderGoalsEditForm(){
   // Пересоздаём кнопку сохранения чтобы не дублировать обработчики
   const oldBtn=document.getElementById("saveSettingsBtn");
   const newBtn=oldBtn.cloneNode(true); oldBtn.parentNode.replaceChild(newBtn,oldBtn);
-  newBtn.addEventListener("click",async()=>{
-    const statusEl=document.getElementById("settingsStatus"); statusEl.textContent="Сохранение…";
+  const getValues=()=>{
+    const values={};
     settingsEl.querySelectorAll("input").forEach(inp=>{
       const uid=inp.dataset.uid, field=inp.dataset.field;
+      if(!values[uid]) values[uid]={};
+      values[uid][field]=Number(inp.value)||0;
+    });
+    return values;
+  };
+  const originalValues=JSON.stringify(getValues());
+  const updateSaveState=()=>{
+    newBtn.disabled=JSON.stringify(getValues())===originalValues;
+  };
+  newBtn.disabled=true;
+  settingsEl.querySelectorAll("input").forEach(inp=>inp.addEventListener("input",updateSaveState));
+  newBtn.addEventListener("click",async()=>{
+    if(newBtn.disabled) return;
+    const statusEl=document.getElementById("settingsStatus"); statusEl.textContent="Сохранение…";
+    const values=getValues();
+    Object.entries(values).forEach(([uid,fields])=>{
       if(!cloudEaten.goals[uid]) cloudEaten.goals[uid]={};
-      cloudEaten.goals[uid][field]=Number(inp.value)||0;
+      Object.assign(cloudEaten.goals[uid],fields);
     });
     try{
       await saveEaten();
