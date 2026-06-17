@@ -309,6 +309,16 @@
         <button class="save-btn" id="saveSettingsBtn">Сохранить цели</button>
         <div class="sync-status" id="settingsStatus"></div>
       </div>
+
+      <div class="settings-section" style="margin-top:24px;">
+        <div class="settings-section-title">Данные</div>
+        <div class="flex-row">
+          <button class="secondary-btn" id="exportDataBtn" style="flex:1;">Экспорт</button>
+          <button class="secondary-btn" id="importDataBtn" style="flex:1;">Импорт</button>
+        </div>
+        <input type="file" id="importDataInput" accept="application/json,.json" style="display:none;">
+        <div class="sync-status" id="dataStatus"></div>
+      </div>
     </div>
 
     <!-- Вкладка: Блюда -->
@@ -388,20 +398,6 @@ const DEFAULT_GOALS = {
   dima:{kcal:2000,protein:120,fat:70,carbs:200},
   natela:{kcal:1600,protein:100,fat:55,carbs:160}
 };
-const DEFAULT_DISHES = [
-  {id:"test_omelet",name:"Омлет с сыром",category:"breakfasts",kcal:360,protein:24,fat:26,carbs:5,portion:"220 г",time:"12 мин",ingredients:"Яйца (120 г), сыр (40 г), молоко (40 мл), масло (10 г)",recipe:"Взбить яйца с молоком, добавить сыр и приготовить на сковороде.",favorite:true,isCustom:true},
-  {id:"test_oatmeal",name:"Овсянка с ягодами",category:"breakfasts",kcal:310,protein:10,fat:8,carbs:50,portion:"280 г",time:"10 мин",ingredients:"Овсянка (60 г), молоко (180 мл), ягоды (40 г)",recipe:"Сварить овсянку на молоке и добавить ягоды.",favorite:false,isCustom:true},
-  {id:"test_chicken",name:"Куриная грудка",category:"main",kcal:285,protein:43,fat:10,carbs:1,portion:"180 г",time:"25 мин",ingredients:"Куриная грудка (180 г), масло (8 г), специи",recipe:"Приправить и запечь или обжарить до готовности.",favorite:true,isCustom:true},
-  {id:"test_salmon",name:"Лосось запеченный",category:"main",kcal:410,protein:36,fat:28,carbs:0,portion:"180 г",time:"20 мин",ingredients:"Лосось (180 г), лимон (20 г), масло (5 г)",recipe:"Запечь с лимоном и специями.",favorite:false,isCustom:true},
-  {id:"test_rice",name:"Рис басмати",category:"sides",kcal:260,protein:5,fat:1,carbs:58,portion:"200 г",time:"18 мин",ingredients:"Рис (70 г), вода, соль",recipe:"Промыть рис и отварить до готовности.",favorite:false,isCustom:true},
-  {id:"test_potato",name:"Картофельное пюре",category:"sides",kcal:240,protein:5,fat:9,carbs:36,portion:"220 г",time:"25 мин",ingredients:"Картофель (220 г), молоко (40 мл), масло (10 г)",recipe:"Отварить картофель и размять с молоком и маслом.",favorite:false,isCustom:true},
-  {id:"test_greek_salad",name:"Греческий салат",category:"salads",kcal:220,protein:7,fat:17,carbs:10,portion:"250 г",time:"10 мин",ingredients:"Огурец (80 г), томаты (100 г), фета (50 г), масло (10 г)",recipe:"Нарезать овощи, добавить фету и масло.",favorite:false,isCustom:true},
-  {id:"test_napoleon",name:"Наполеон",category:"desserts",kcal:430,protein:6,fat:25,carbs:45,portion:"120 г",time:"—",ingredients:"Тесто слоеное, крем заварной",recipe:"Готовый десерт порционно.",favorite:true,isCustom:true},
-  {id:"test_borscht",name:"Борщ",category:"soups",kcal:210,protein:12,fat:9,carbs:20,portion:"350 г",time:"60 мин",ingredients:"Свекла (80 г), капуста (80 г), говядина (80 г), картофель (70 г)",recipe:"Сварить бульон, добавить овощи и томить до готовности.",favorite:false,isCustom:true},
-  {id:"test_hummus",name:"Хумус с овощами",category:"snacks",kcal:260,protein:9,fat:15,carbs:24,portion:"180 г",time:"8 мин",ingredients:"Хумус (100 г), морковь (40 г), огурец (40 г)",recipe:"Подать хумус с нарезанными овощами.",favorite:false,isCustom:true},
-  {id:"test_cappuccino",name:"Капучино",category:"drinks",kcal:110,protein:6,fat:6,carbs:9,portion:"250 г",time:"5 мин",ingredients:"Эспрессо (40 мл), молоко (180 мл)",recipe:"Приготовить эспрессо и добавить вспененное молоко.",favorite:true,isCustom:true},
-  {id:"test_morse",name:"Ягодный морс",category:"drinks",kcal:90,protein:0,fat:0,carbs:22,portion:"250 г",time:"10 мин",ingredients:"Ягоды (60 г), вода (220 мл), сахар (15 г)",recipe:"Проварить ягоды с водой и сахаром, процедить.",favorite:false,isCustom:true}
-];
 
 const JSONBIN_KEY = "$2a$10$4wA7T6em0ATgsI36drn8Ie4xNUEB77cklSxKuv7LOXVJbQAhds2Xe";
 const DISHES_URL  = "https://api.jsonbin.io/v3/b/6a2edef1f5f4af5e29f0fb74";
@@ -412,27 +408,37 @@ let cloudDishes = [];
 let cloudPlan   = { dataVersion:DATA_VERSION, plan:{}, favorites:{} };
 let cloudEaten  = { dataVersion:DATA_VERSION, goals:JSON.parse(JSON.stringify(DEFAULT_GOALS)) };
 let allDishes   = [];
+let loadErrors  = [];
 
 /* ============================================================
    JSONBIN
    ============================================================ */
 async function apiFetch(url, options={}){
-  const res = await fetch(url, {
-    headers:{"X-Master-Key":JSONBIN_KEY,"Content-Type":"application/json"},
-    ...options
-  });
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  return res.json();
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+    const res = await fetch(url, {
+      headers:{"X-Master-Key":JSONBIN_KEY,"Content-Type":"application/json"},
+      ...options,
+      signal:controller.signal
+    });
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    return res.json();
+  }finally{
+    clearTimeout(timeout);
+  }
 }
 async function loadDishes(){
   try{
     const d=await apiFetch(DISHES_URL+"/latest");
     if(d.record?.dataVersion===DATA_VERSION){ cloudDishes=d.record.customDishes||[]; return; }
-    cloudDishes=JSON.parse(JSON.stringify(DEFAULT_DISHES));
-    await saveDishes();
+    console.warn("Версия данных блюд не совпадает",d.record?.dataVersion);
+    loadErrors.push("Блюда не загружены: неподдерживаемая версия данных.");
+    cloudDishes=[];
   }catch(e){
-    console.warn("Не удалось загрузить блюда, используются тестовые данные",e);
-    cloudDishes=JSON.parse(JSON.stringify(DEFAULT_DISHES));
+    console.warn("Не удалось загрузить блюда",e);
+    loadErrors.push("Блюда не загружены.");
+    cloudDishes=[];
   }
 }
 async function saveDishes(){ await apiFetch(DISHES_URL,{method:"PUT",body:JSON.stringify({dataVersion:DATA_VERSION,customDishes:cloudDishes})}); }
@@ -440,57 +446,34 @@ async function loadPlan(){
   try{
     const d=await apiFetch(PLAN_URL+"/latest");
     if(d.record?.dataVersion!==DATA_VERSION){
-      cloudPlan={dataVersion:DATA_VERSION,plan:createDefaultPlan(),favorites:{}};
-      await savePlan();
+      console.warn("Версия данных плана не совпадает",d.record?.dataVersion);
+      loadErrors.push("План не загружен: неподдерживаемая версия данных.");
+      cloudPlan={dataVersion:DATA_VERSION,plan:{},favorites:{}};
       return;
     }
     cloudPlan=d.record||{dataVersion:DATA_VERSION,plan:{},favorites:{}};
     cloudPlan.dataVersion=DATA_VERSION;
     cloudPlan.plan=cloudPlan.plan||{}; cloudPlan.favorites=cloudPlan.favorites||{};
   }catch(e){
-    console.warn("Не удалось загрузить план, используется тестовый план",e);
-    cloudPlan={dataVersion:DATA_VERSION,plan:createDefaultPlan(),favorites:{}};
+    console.warn("Не удалось загрузить план",e);
+    loadErrors.push("План не загружен.");
+    cloudPlan={dataVersion:DATA_VERSION,plan:{},favorites:{}};
   }
 }
 async function savePlan(){ await apiFetch(PLAN_URL,{method:"PUT",body:JSON.stringify({...cloudPlan,dataVersion:DATA_VERSION})}); }
-function createDefaultPlan(){
-  return {
-    [dateStr(0)]:{meals:[
-      {id:makeId("meal"),name:"Завтрак",items:[
-        {id:makeId("item"),dishId:"test_oatmeal",customPortion:null},
-        {id:makeId("item"),dishId:"test_cappuccino",customPortion:null}
-      ]},
-      {id:makeId("meal"),name:"Обед",items:[
-        {id:makeId("item"),dishId:"test_chicken",customPortion:null},
-        {id:makeId("item"),dishId:"test_rice",customPortion:null},
-        {id:makeId("item"),dishId:"test_greek_salad",customPortion:null}
-      ]},
-      {id:makeId("meal"),name:"Ужин",items:[
-        {id:makeId("item"),dishId:"test_salmon",customPortion:null},
-        {id:makeId("item"),dishId:"test_potato",customPortion:null}
-      ]}
-    ]},
-    [dateStr(1)]:{meals:[
-      {id:makeId("meal"),name:"Завтрак",items:[
-        {id:makeId("item"),dishId:"test_omelet",customPortion:null}
-      ]},
-      {id:makeId("meal"),name:"Перекус",items:[
-        {id:makeId("item"),dishId:"test_hummus",customPortion:null}
-      ]}
-    ]}
-  };
-}
 async function loadEaten(){
   try{
     const d=await apiFetch(EATEN_URL+"/latest");
     if(d.record?.dataVersion!==DATA_VERSION){
+      console.warn("Версия истории питания не совпадает",d.record?.dataVersion);
+      loadErrors.push("История питания не загружена: неподдерживаемая версия данных.");
       cloudEaten={dataVersion:DATA_VERSION,goals:JSON.parse(JSON.stringify(DEFAULT_GOALS))};
-      await saveEaten();
       return;
     }
     cloudEaten=d.record||{};
   }catch(e){
-    console.warn("Не удалось загрузить историю питания, используются цели по умолчанию",e);
+    console.warn("Не удалось загрузить историю питания",e);
+    loadErrors.push("История питания не загружена.");
     cloudEaten={dataVersion:DATA_VERSION,goals:JSON.parse(JSON.stringify(DEFAULT_GOALS))};
   }
   cloudEaten.dataVersion=DATA_VERSION;
@@ -498,6 +481,75 @@ async function loadEaten(){
   PROFILES.forEach(p=>{ if(!cloudEaten.goals[p.uid]) cloudEaten.goals[p.uid]={...DEFAULT_GOALS[p.uid]}; });
 }
 async function saveEaten(){ await apiFetch(EATEN_URL,{method:"PUT",body:JSON.stringify({...cloudEaten,dataVersion:DATA_VERSION})}); }
+
+function buildDataArchive(){
+  return {
+    dataVersion:DATA_VERSION,
+    exportedAt:new Date().toISOString(),
+    dishes:{dataVersion:DATA_VERSION,customDishes:cloudDishes},
+    plan:{...cloudPlan,dataVersion:DATA_VERSION,plan:cloudPlan.plan||{},favorites:cloudPlan.favorites||{}},
+    eaten:{...cloudEaten,dataVersion:DATA_VERSION,goals:cloudEaten.goals||JSON.parse(JSON.stringify(DEFAULT_GOALS))}
+  };
+}
+function downloadDataArchive(){
+  const statusEl=document.getElementById("dataStatus");
+  try{
+    const data=JSON.stringify(buildDataArchive(),null,2);
+    const blob=new Blob([data],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=`menu-backup-${dateStr(0)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    if(statusEl) statusEl.textContent="Экспорт готов";
+  }catch(e){
+    if(statusEl) statusEl.textContent="Ошибка экспорта";
+  }
+}
+function normalizeImportedData(raw){
+  const dishes=raw.dishes||raw;
+  const plan=raw.plan||raw;
+  const eaten=raw.eaten||raw;
+  if(dishes.dataVersion!==DATA_VERSION||plan.dataVersion!==DATA_VERSION||eaten.dataVersion!==DATA_VERSION){
+    throw new Error("Неподдерживаемая версия данных");
+  }
+  if(!Array.isArray(dishes.customDishes)) throw new Error("В архиве нет списка блюд");
+  return {
+    dishes:{dataVersion:DATA_VERSION,customDishes:dishes.customDishes},
+    plan:{dataVersion:DATA_VERSION,plan:plan.plan||{},favorites:plan.favorites||{}},
+    eaten:{...eaten,dataVersion:DATA_VERSION,goals:eaten.goals||JSON.parse(JSON.stringify(DEFAULT_GOALS))}
+  };
+}
+async function importDataArchive(file){
+  const statusEl=document.getElementById("dataStatus");
+  if(!file) return;
+  try{
+    statusEl.textContent="Чтение файла…";
+    const raw=JSON.parse(await file.text());
+    const next=normalizeImportedData(raw);
+    if(!await askConfirm("Импорт заменит текущие блюда, план и историю питания. Продолжить?")){ statusEl.textContent=""; return; }
+    statusEl.textContent="Сохранение…";
+    await Promise.all([
+      apiFetch(DISHES_URL,{method:"PUT",body:JSON.stringify(next.dishes)}),
+      apiFetch(PLAN_URL,{method:"PUT",body:JSON.stringify(next.plan)}),
+      apiFetch(EATEN_URL,{method:"PUT",body:JSON.stringify(next.eaten)})
+    ]);
+    cloudDishes=next.dishes.customDishes;
+    cloudPlan=next.plan;
+    cloudEaten=next.eaten;
+    loadErrors=[];
+    prepareAllDishes();
+    statusEl.textContent="Импорт завершён ✓";
+    renderAdmin();
+    setView("admin");
+  }catch(e){
+    console.warn("Ошибка импорта",e);
+    statusEl.textContent=e.message||"Ошибка импорта";
+  }
+}
 
 /* ============================================================
    БЛЮДА
@@ -693,6 +745,10 @@ function render(){
   const q=searchQuery.toLowerCase();
   const filtered=q?dishes.filter(d=>(d.name+" "+d.ingredients+" "+(d.recipe||"")).toLowerCase().includes(q)):dishes;
   contentEl.innerHTML="";
+  if(loadErrors.length&&!allDishes.length){
+    contentEl.innerHTML=`<div class="empty">Не удалось загрузить данные.<br>Проверьте подключение и обновите страницу.</div>`;
+    return;
+  }
   if(!filtered.length){ contentEl.innerHTML=`<div class="empty">${q?"Ничего не найдено":"Пока ничего не добавлено"}</div>`; return; }
   const favs=filtered.filter(d=>isFavorite(d)).sort((a,b)=>a.name.localeCompare(b.name,"ru"));
   const others=filtered.filter(d=>!isFavorite(d)).sort((a,b)=>a.name.localeCompare(b.name,"ru"));
@@ -864,7 +920,9 @@ function renderPlanDay(){
 
   const meals=getDayMeals(dayPlan);
   if(!getPlanEntries(dayPlan).length){
-    c2.innerHTML=`<div class="empty">На этот день ничего не запланировано.</div>`;
+    const planLoadError=loadErrors.some(msg=>msg.includes("План"));
+    c2.innerHTML=`<div class="empty">${planLoadError?"Не удалось загрузить план.<br>Проверьте подключение и обновите страницу.":"На этот день ничего не запланировано."}</div>`;
+    if(planLoadError) return;
     const btn=document.createElement("button"); btn.className="edit-btn"; btn.textContent="+ Добавить план";
     btn.addEventListener("click",()=>showPlanEditForm(ds)); c2.appendChild(btn);
     return;
@@ -1496,6 +1554,12 @@ async function init(){
   });
   document.getElementById("eatenSaveBtn").addEventListener("click",saveEatenEntry);
   document.getElementById("eatenClearBtn").addEventListener("click",clearEatenEntry);
+  document.getElementById("exportDataBtn").addEventListener("click",downloadDataArchive);
+  document.getElementById("importDataBtn").addEventListener("click",()=>document.getElementById("importDataInput").click());
+  document.getElementById("importDataInput").addEventListener("change",async e=>{
+    await importDataArchive(e.target.files?.[0]);
+    e.target.value="";
+  });
 
   CATEGORIES.forEach(cat=>{
     const btn=document.createElement("button"); btn.textContent=cat.label; btn.dataset.key=cat.key;
