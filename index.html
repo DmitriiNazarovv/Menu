@@ -189,9 +189,6 @@
   .goals-kpi-cell{background:var(--paper);border-radius:7px;padding:8px 4px;text-align:center;}
   .goals-kpi-val{font-family:-apple-system,sans-serif;font-size:15px;font-weight:700;color:var(--accent);}
   .goals-kpi-lbl{font-family:-apple-system,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:2px;}
-  .goals-edit-btn{width:100%;margin-top:12px;font-family:-apple-system,sans-serif;font-size:13px;font-weight:500;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:10px;border-radius:8px;cursor:pointer;}
-  .goals-edit-btn:active{background:var(--ink);color:var(--paper);}
-
   /* Форма редактирования целей */
   .goals-edit-form{display:none;margin-top:16px;background:var(--accent-bg);border-radius:10px;padding:14px;}
   .goals-edit-form.open{display:block;}
@@ -311,7 +308,7 @@
     <!-- Вкладка: Цели -->
     <div id="adminGoalsTab">
       <div class="goals-view" id="goalsStaticView"></div>
-      <button class="goals-edit-btn" id="goalsEditToggleBtn">Изменить цели</button>
+      <button class="secondary-btn" id="goalsEditToggleBtn" style="width:100%;margin-top:12px;">Изменить цели</button>
       <div class="goals-edit-form" id="goalsEditForm">
         <div id="profileSettings"></div>
         <button class="save-btn" id="saveSettingsBtn">Сохранить цели</button>
@@ -320,6 +317,7 @@
 
       <div class="settings-section" style="margin-top:24px;">
         <div class="settings-section-title">Данные</div>
+        <button class="secondary-btn" id="refreshDataBtn" style="width:100%;margin-bottom:8px;">Обновить данные</button>
         <div class="flex-row">
           <button class="secondary-btn" id="exportDataBtn" style="flex:1;">Экспорт</button>
           <button class="secondary-btn" id="importDataBtn" style="flex:1;">Импорт</button>
@@ -558,6 +556,25 @@ async function importDataArchive(file){
     statusEl.textContent=e.message||"Ошибка импорта";
   }
 }
+async function refreshCloudData(){
+  const statusEl=document.getElementById("dataStatus");
+  const btn=document.getElementById("refreshDataBtn");
+  const currentView=getCurrentView();
+  statusEl.textContent="Обновление…";
+  if(btn) btn.disabled=true;
+  loadErrors=[];
+  try{
+    await Promise.all([loadDishes(),loadPlan(),loadEaten()]);
+    prepareAllDishes();
+    setView(currentView);
+    statusEl.textContent=loadErrors.length ? loadErrors.join(" ") : "Данные обновлены ✓";
+  }catch(e){
+    console.error("Ошибка обновления данных",e);
+    statusEl.textContent="Ошибка обновления";
+  }finally{
+    if(btn) btn.disabled=false;
+  }
+}
 
 /* ============================================================
    БЛЮДА
@@ -711,6 +728,9 @@ function setView(viewId){
   if(viewId==="history") renderHistoryView();
   if(viewId==="admin")   renderAdmin();
   if(viewId==="main")    render();
+}
+function getCurrentView(){
+  return VIEWS.find(v=>document.getElementById(v+"View").style.display!=="none")||"main";
 }
 
 /* ============================================================
@@ -1564,6 +1584,7 @@ async function init(){
   document.getElementById("eatenClearBtn").addEventListener("click",clearEatenEntry);
   document.getElementById("exportDataBtn").addEventListener("click",downloadDataArchive);
   document.getElementById("importDataBtn").addEventListener("click",()=>document.getElementById("importDataInput").click());
+  document.getElementById("refreshDataBtn").addEventListener("click",refreshCloudData);
   document.getElementById("importDataInput").addEventListener("change",async e=>{
     await importDataArchive(e.target.files?.[0]);
     e.target.value="";
