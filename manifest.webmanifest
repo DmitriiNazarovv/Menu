@@ -2,7 +2,7 @@
   "name": "Домашнее меню",
   "short_name": "Меню",
   "description": "План питания, покупки и история",
-  "start_url": "./Меню%20Итог.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FBF8F2",
